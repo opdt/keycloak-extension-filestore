@@ -1,0 +1,15 @@
+attributes:
+  display.on.consent.screen: false
+  include.in.token.scope: false
+description: OpenID Connect scope for add allowed web origins to the access token
+id: web-origins
+name: web-origins
+protocol: openid-connect
+protocolMappers:
+- config: {}
+  id: 18bceceb-cf06-4f33-9b88-6f9794436fa4
+  isUpdated: false
+  name: allowed web origins
+  protocolMapper: oidc-allowed-origins-mapper
+realmId: master
+scopeMappings: []
