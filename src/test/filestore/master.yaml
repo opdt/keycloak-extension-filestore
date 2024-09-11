@@ -1,0 +1,970 @@
+accessCodeLifespan: 60
+accessCodeLifespanLogin: 1800
+accessCodeLifespanUserAction: 300
+accessTokenLifespan: 60
+accessTokenLifespanForImplicitFlow: 900
+accountTheme: ${SHOULD_BE_RESOLVED}
+actionTokenGeneratedByAdminLifespan: 0
+adminEventsDetailsEnabled: false
+adminEventsEnabled: true
+adminTheme: ${SHOULD_NOT_BE_RESOLVED}
+allowUserManagedAccess: false
+attributes: {}
+authenticationExecutions:
+- authenticator: direct-grant-validate-password
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 8c222dab-e85a-4084-bd08-b8e7bced017c
+  parentFlowId: defaultDirectGrantFlow
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: conditional-user-configured
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 8ae48afa-a0bb-4e9e-89d4-5e699d8e3331
+  parentFlowId: 4f51e9c3-6c72-4882-8454-7026e02efec3
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: auth-otp-form
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 6bc46f53-b0b7-4f76-9e9c-989a457f540d
+  parentFlowId: 4f51e9c3-6c72-4882-8454-7026e02efec3
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 4f51e9c3-6c72-4882-8454-7026e02efec3
+  id: 680c4c8d-28d9-4765-86a5-27de66f73d3c
+  parentFlowId: d5ce8698-84ac-41d6-868a-33138186eecd
+  priority: 20
+  requirement: CONDITIONAL
+  updated: false
+- authenticator: idp-confirm-link
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 09a977a2-3fa2-41ba-805f-b80620ec8026
+  parentFlowId: 9fda8127-31c3-44ee-80ed-242f06ea21ad
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: conditional-user-configured
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: c8b93f24-efdc-4f34-aea9-594dd6301368
+  parentFlowId: 20bb4829-9af8-45df-b226-3dca989ae4d4
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: client-secret
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: e096104d-b09d-4409-95e1-c2e53ba02c0f
+  parentFlowId: defaultClientAuthenticationFlow
+  priority: 10
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: http-basic-authenticator
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 5bc0a808-0f8f-4abd-acaf-ef7bf8005fe4
+  parentFlowId: dd704856-13a1-4eb1-9cb1-d7e0cf420cce
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: cb334b31-d28b-4261-8d2f-6d9463870e59
+  id: fb3d7155-bb18-409a-b21e-263cf8ef9eb1
+  parentFlowId: firstBrokerLogin
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 9fda8127-31c3-44ee-80ed-242f06ea21ad
+  id: 5021e5ff-f682-47ce-ae09-ced0c55ef453
+  parentFlowId: cb334b31-d28b-4261-8d2f-6d9463870e59
+  priority: 20
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 0a383d05-4039-4d89-a3cf-9731dde8b5d0
+  id: 2399eea4-5050-47f9-84cb-f4ae7cfc5d04
+  parentFlowId: defaultResetCredentialsFlow
+  priority: 40
+  requirement: CONDITIONAL
+  updated: false
+- authenticator: reset-otp
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 0e5a1e0b-251e-47e1-a0bd-894850ff880e
+  parentFlowId: 0a383d05-4039-4d89-a3cf-9731dde8b5d0
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: no-cookie-redirect
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 3b1794b1-ee46-4a3b-abd6-6084dcd9f330
+  parentFlowId: 2344e896-89c6-4e92-ba49-7777bea5cd81
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: basic-auth
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 464f5e1a-7c89-4997-b89d-416f195d2da5
+  parentFlowId: 9160f792-ad66-436f-abb7-3a13cfdd6b2e
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: identity-provider-redirector
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 6a9de6fa-821b-4884-a147-05e1e553f48d
+  parentFlowId: defaultBrowserFlow
+  priority: 25
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 9160f792-ad66-436f-abb7-3a13cfdd6b2e
+  id: 287440bb-4052-491e-9daa-4be0b8b5316a
+  parentFlowId: 2344e896-89c6-4e92-ba49-7777bea5cd81
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: client-x509
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: cdffca7d-b994-4489-964f-28653307f47a
+  parentFlowId: defaultClientAuthenticationFlow
+  priority: 40
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: auth-cookie
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: b6b9a147-086f-4cff-a746-672a367fe5d3
+  parentFlowId: defaultBrowserFlow
+  priority: 10
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: conditional-user-configured
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: e4eacaaf-2d5b-4d07-8838-10808bd291de
+  parentFlowId: 560db948-061e-48e4-96a5-b25144014300
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: reset-credentials-choose-user
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 56d4564a-e830-489b-9cec-711ee471b0ef
+  parentFlowId: defaultResetCredentialsFlow
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: auth-username-password-form
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 8fd026fe-c47d-43ab-b863-d7ecd6b1cb36
+  parentFlowId: 69f4f3fa-b6d7-4c6a-bca8-c960e7a96a73
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: idp-username-password-form
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 6165583e-2a1a-468d-94e2-2c1ea7dd8743
+  parentFlowId: d5ce8698-84ac-41d6-868a-33138186eecd
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: conditional-user-configured
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: f5e9686e-93ba-4978-9da0-3f69ca53f14f
+  parentFlowId: 0a383d05-4039-4d89-a3cf-9731dde8b5d0
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 69f4f3fa-b6d7-4c6a-bca8-c960e7a96a73
+  id: e27247d9-14bf-4648-849a-25500d061066
+  parentFlowId: defaultBrowserFlow
+  priority: 30
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: auth-spnego
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 8f41053b-a4d0-422a-aaa0-a94d57083f16
+  parentFlowId: defaultBrowserFlow
+  priority: 20
+  requirement: DISABLED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 560db948-061e-48e4-96a5-b25144014300
+  id: 3b316552-6fef-43ef-946c-4a4725ab95a5
+  parentFlowId: defaultDirectGrantFlow
+  priority: 30
+  requirement: CONDITIONAL
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 20bb4829-9af8-45df-b226-3dca989ae4d4
+  id: 05931779-eebe-438d-9a30-62cf3c4603f3
+  parentFlowId: 69f4f3fa-b6d7-4c6a-bca8-c960e7a96a73
+  priority: 20
+  requirement: CONDITIONAL
+  updated: false
+- authenticator: auth-otp-form
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: f8cfd821-207d-4a90-af49-0835f5f648f4
+  parentFlowId: 20bb4829-9af8-45df-b226-3dca989ae4d4
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: registration-recaptcha-action
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 8761d349-e926-4c0e-8c3a-3d93f139e78d
+  parentFlowId: 11aac49a-c627-4f0a-b4c1-f7deb4ccc92d
+  priority: 60
+  requirement: DISABLED
+  updated: false
+- authenticator: auth-spnego
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: e92a4f03-5d1e-4ec1-92ff-0085090b6554
+  parentFlowId: 9160f792-ad66-436f-abb7-3a13cfdd6b2e
+  priority: 30
+  requirement: DISABLED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: b272649f-1948-42bf-8811-f013595e3477
+  id: 65e3873d-ab52-4920-bc70-ac9e867d321f
+  parentFlowId: 9fda8127-31c3-44ee-80ed-242f06ea21ad
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: direct-grant-validate-otp
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 2d466e13-ae2a-4067-b7bb-30dd9f8f95b3
+  parentFlowId: 560db948-061e-48e4-96a5-b25144014300
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: docker-http-basic-authenticator
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 518196b7-d215-4b41-a48f-2caf0eb0eb47
+  parentFlowId: defaultDockerFlow
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: d5ce8698-84ac-41d6-868a-33138186eecd
+  id: 1e10d035-1e84-4e73-b661-87ceebbdc899
+  parentFlowId: b272649f-1948-42bf-8811-f013595e3477
+  priority: 20
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: idp-create-user-if-unique
+  authenticatorConfig: 57ddbdf4-7f33-414b-8764-99274202ebdf
+  autheticatorFlow: false
+  flowId: null
+  id: ce21fc34-4945-4fac-955c-947c645a95b7
+  parentFlowId: cb334b31-d28b-4261-8d2f-6d9463870e59
+  priority: 10
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: a27f27cb-25c3-416c-8d2b-63ce0e67ed64
+  id: fffef72c-79a3-47f9-b4cb-ab72eb71a21f
+  parentFlowId: 21f6d98f-84a6-4cbc-9bd1-d103bc116414
+  priority: 2
+  requirement: CONDITIONAL
+  updated: false
+- authenticator: idp-review-profile
+  authenticatorConfig: 1797b96a-8acc-46e2-a8bf-7c7ec391dc0b
+  autheticatorFlow: false
+  flowId: null
+  id: e8a29c57-e507-4a8d-a47c-559d5953f778
+  parentFlowId: firstBrokerLogin
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: registration-page-form
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 11aac49a-c627-4f0a-b4c1-f7deb4ccc92d
+  id: 33b3d3a1-4ff5-44d0-9416-087b604d4d55
+  parentFlowId: defaultRegistrationFlow
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: reset-credential-email
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 4b67de9a-0a09-4459-a152-1f61dfab3704
+  parentFlowId: defaultResetCredentialsFlow
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: reset-password
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 1e24879f-6c6f-494d-8704-482648c903ba
+  parentFlowId: defaultResetCredentialsFlow
+  priority: 30
+  requirement: REQUIRED
+  updated: false
+- authenticator: client-jwt
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 0b6d3b76-4bdf-4cbf-ac9d-69ccaa39b540
+  parentFlowId: defaultClientAuthenticationFlow
+  priority: 20
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: basic-auth-otp
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 88925a73-6833-4064-b8d7-a34d9e6560b4
+  parentFlowId: 9160f792-ad66-436f-abb7-3a13cfdd6b2e
+  priority: 20
+  requirement: DISABLED
+  updated: false
+- authenticator: null
+  authenticatorConfig: null
+  autheticatorFlow: true
+  flowId: 57871bd1-46a1-4aea-8cb7-bd58166e3c46
+  id: b6403d4f-e31c-44de-9da6-7fe90c9c6231
+  parentFlowId: 21f6d98f-84a6-4cbc-9bd1-d103bc116414
+  priority: 1
+  requirement: CONDITIONAL
+  updated: false
+- authenticator: registration-profile-action
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: f50667f7-7783-49b7-990b-5c3c4366b32c
+  parentFlowId: 11aac49a-c627-4f0a-b4c1-f7deb4ccc92d
+  priority: 40
+  requirement: REQUIRED
+  updated: false
+- authenticator: registration-password-action
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: e5b88145-4745-4c95-a7be-c910c8ada96a
+  parentFlowId: 11aac49a-c627-4f0a-b4c1-f7deb4ccc92d
+  priority: 50
+  requirement: REQUIRED
+  updated: false
+- authenticator: registration-user-creation
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 7ced5a1e-bc4d-45e5-91a7-2c9d4b4b9a98
+  parentFlowId: 11aac49a-c627-4f0a-b4c1-f7deb4ccc92d
+  priority: 20
+  requirement: REQUIRED
+  updated: false
+- authenticator: direct-grant-validate-username
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: e14c1145-c754-4936-8735-163046d23d2c
+  parentFlowId: defaultDirectGrantFlow
+  priority: 10
+  requirement: REQUIRED
+  updated: false
+- authenticator: client-secret-jwt
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 9700a61b-80df-4747-abcd-87767ec75d26
+  parentFlowId: defaultClientAuthenticationFlow
+  priority: 30
+  requirement: ALTERNATIVE
+  updated: false
+- authenticator: idp-email-verification
+  authenticatorConfig: null
+  autheticatorFlow: false
+  flowId: null
+  id: 47372bb7-799c-49c2-bd5f-7c42a05e54b0
+  parentFlowId: b272649f-1948-42bf-8811-f013595e3477
+  priority: 10
+  requirement: ALTERNATIVE
+  updated: false
+authenticationFlows:
+- alias: Verify Existing Account by Re-authentication
+  builtIn: true
+  description: Reauthentication of existing account
+  id: d5ce8698-84ac-41d6-868a-33138186eecd
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: http challenge
+  builtIn: true
+  description: An authentication flow based on challenge-response HTTP Authentication
+    Schemes
+  id: 2344e896-89c6-4e92-ba49-7777bea5cd81
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: reset credentials
+  builtIn: true
+  description: Reset credentials for a user if they forgot their password or something
+  id: defaultResetCredentialsFlow
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: forms
+  builtIn: true
+  description: Username, password, otp and other auth forms.
+  id: 69f4f3fa-b6d7-4c6a-bca8-c960e7a96a73
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: browser
+  builtIn: true
+  description: browser based authentication
+  id: defaultBrowserFlow
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: registration form
+  builtIn: true
+  description: registration form
+  id: 11aac49a-c627-4f0a-b4c1-f7deb4ccc92d
+  providerId: form-flow
+  topLevel: false
+  updated: false
+- alias: Account verification options
+  builtIn: true
+  description: Method with which to verity the existing account
+  id: b272649f-1948-42bf-8811-f013595e3477
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: Reset - Conditional OTP
+  builtIn: true
+  description: Flow to determine if the OTP should be reset or not. Set to REQUIRED
+    to force.
+  id: 0a383d05-4039-4d89-a3cf-9731dde8b5d0
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: Handle Existing Account
+  builtIn: true
+  description: Handle what to do if there is existing account with same email/username
+    like authenticated identity provider
+  id: 9fda8127-31c3-44ee-80ed-242f06ea21ad
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: Direct Grant - Conditional OTP
+  builtIn: true
+  description: Flow to determine if the OTP is required for the authentication
+  id: 560db948-061e-48e4-96a5-b25144014300
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: clients
+  builtIn: true
+  description: Base authentication for clients
+  id: defaultClientAuthenticationFlow
+  providerId: client-flow
+  topLevel: true
+  updated: false
+- alias: direct grant
+  builtIn: true
+  description: OpenID Connect Resource Owner Grant
+  id: defaultDirectGrantFlow
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: User creation or linking
+  builtIn: true
+  description: Flow for the existing/non-existing user alternatives
+  id: cb334b31-d28b-4261-8d2f-6d9463870e59
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: Authentication Options
+  builtIn: true
+  description: Authentication options.
+  id: 9160f792-ad66-436f-abb7-3a13cfdd6b2e
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: Browser - Conditional OTP
+  builtIn: true
+  description: Flow to determine if the OTP is required for the authentication
+  id: 20bb4829-9af8-45df-b226-3dca989ae4d4
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: First broker login - Conditional OTP
+  builtIn: true
+  description: Flow to determine if the OTP is required for the authentication
+  id: 4f51e9c3-6c72-4882-8454-7026e02efec3
+  providerId: basic-flow
+  topLevel: false
+  updated: false
+- alias: docker auth
+  builtIn: true
+  description: Used by Docker clients to authenticate against the IDP
+  id: defaultDockerFlow
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: registration
+  builtIn: true
+  description: registration flow
+  id: defaultRegistrationFlow
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: first broker login
+  builtIn: true
+  description: Actions taken after first broker login with identity provider account,
+    which is not yet linked to any Keycloak account
+  id: firstBrokerLogin
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+- alias: saml ecp
+  builtIn: true
+  description: SAML ECP Profile Authentication Flow
+  id: dd704856-13a1-4eb1-9cb1-d7e0cf420cce
+  providerId: basic-flow
+  topLevel: true
+  updated: false
+authenticatorConfigs:
+- alias: review profile config
+  config:
+    update.profile.on.first.login: missing
+  id: 1797b96a-8acc-46e2-a8bf-7c7ec391dc0b
+  updated: false
+- alias: create unique user config
+  config:
+    require.password.update.after.registration: 'false'
+  id: 57ddbdf4-7f33-414b-8764-99274202ebdf
+  updated: false
+browserFlow: defaultBrowserFlow
+browserSecurityHeaders:
+  contentSecurityPolicy: frame-src 'self'; frame-ancestors 'self'; object-src 'none';
+  strictTransportSecurity: max-age=31536000; includeSubDomains
+  xContentTypeOptions: nosniff
+  xFrameOptions: SAMEORIGIN
+  xRobotsTag: none
+  xXSSProtection: 1; mode=block
+clientAuthenticationFlow: defaultClientAuthenticationFlow
+clientInitialAccesses: []
+clientOfflineSessionIdleTimeout: 0
+clientOfflineSessionMaxLifespan: 0
+clientSessionIdleTimeout: 0
+clientSessionMaxLifespan: 0
+components:
+- config:
+    active: true
+    algorithm: RS256
+    certificate: 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
+    enabled: true
+    priority: 200
+    privateKey: MIIJKAIBAAKCAgEA0gfb1KnbkKxPSbWQgm867K4NO8BHMyUm6jhy2Si0+O1FWYJHGxA8fgyelBKpM3cu6FCMVi7cs/Pl1yOPT2Z2JEJ9z0Q6+JSZn58gG4mN16IKhsfQUebCYjK52iEdhy5ctuPTHKmubcJxwMk2u8Jran7ixIKQUxI/qxXOqfdMdhfypK200r9RsxN0HmNAzqgTha5inDcf1W2HhcVy+xPMS4Ofy5393iqhxyYq81+C7KlMxLXeReheFD7XogL5FLpj99clmN7D5YfwUud86FBwIKNHMGKUUR1zZ5jjugS2VEzwABz9+NWpo7di6zWhbi03lJ7KNAVCQPof3hnVrTYmA+NYXQXc8sDSxWvlVp2WnAdJkuSUe49ROkHrhcB8ILwhqAO+J59PvGH7fQ8hmjXpWjKT0pEGzcLQ35oW8TlAFi/7sTS7ejqwpX5TOHuUCl7Pyjc8x/qpYynErzhxIenKJEj0BVVHLzWYjFPLJtG+MRa/QgWqoBiUNX3jOSFvqkNwipoP5ewYuh66k4gp0n6/wOdS4lmKM6lGnsfTBmgqIB0fdSkera33r/windvpZOQep02oU2jdfTPf5nTBjbUH/EPuZnKZxqjCFwDEULyoR3AFFn/m663ZlJLLGRvVSnhCQ47D1T/ISCIEiR2QFQrJdUsrQWWXrSs/24j9JjGhfq0CAwEAAQKCAgBRKSJEyqKDBGLbO+Ms1Ciz/wo0FbgtxmSES+3thrJwItgSn6o0hhCqMNwyogdqUNr6gO3J++/jRhOCEEa3ywNKPbt6FYaoOlwm94mjuoLqWb6xmJMiowZoheuVpAhSDZNcRSt2PwedeG8WrWqOIbH6hC/C+iUlRL7/sLycp2iPle94vXtLmQzMI29Sss3/TanFlb6bWR3fDqU5BzTIWz0tzR45w8KvUFAVseUVCMqCA2Yb+Z976jA4qJQREg8IeIJa6nOn4CVZFC/FCZkV+MdrhUzkIKPpuHS5CratUlbWuqhfktR9jKsyDZKXC7Fm7ug0cSv38DRLAZzA6cDNX0hOsvL6V1WnWBVEQRdtnGC5cL2hhXZs1gYPCYRiOIJM6+y859Mo1vCMcae5+SfWoPY0Xd03AqZ5SDpln3+djZV9U2REnjKfhOJNf0z7bskzGLjPdyfpov1n858ZktwVgHnx9N/pobZiDpm7N9s+qLHv106C9gP3Dbs0vgA9KtN08JAE0H3exRtkPmLINqok24+NjF8jcpeQWPoiwtW/nT78Jntg3Pl5gxu1+724HmPbqFwF6q5tvVdpS3VSjTlznb1qzRICC3+351WgCV/tBaM9mkQUm8rXyNC48YYWAICr2splGtxz/fsma7mZdR3TRZ3IQKkn8IUzldPTlJhY4LMozQKCAQEA8gQdgwNCYkF9DQLxKQPu7/gCI5se0yY6nrMzwhGxwFvhdr5t/xxO7+HbJcFVQaYftx5hA8Xn6sQziSGpPYIANB9WDqUwmkjKD2CcXOYDNtF9HRLhWCqBtpyS0HERfi2TsebPrbdmLdtYFjKx6JESLoaswHlfQ/dWkXg7dUgj1W+lSdO/O/6dx0NukFZFTjBj9yjQUDJ7VFUyvi00xjjbSw0GMrMPm43nYyf46f1/FuxLVhVNx3BoOiOPcvAHktB7P1gvwB6429Cy3qsQ7vSKYmtfYRu/tuIL6I/2VIbGMd9lDTjBX4iOjtTK8Z4tCpDBv7jddTXU0n3xSaUe7fyvZwKCAQEA3iqeNIoGwpNhwoH5Nu1ppFKVcXh28SsZW61hYVKxt9YP7vXpvd2coWqtQTD2nVct8mknHQ2rDi8qBTMN4yXcjuJZsD0bgY5bXyc6TScW78AHxyC+oD2w400D9DhN/wfc87+pV0ygSvQGV3gF602atFxDgbaYTZ68cOa6euORRBLQgTlwexdG2bwJ2jHJ4neOY97S7mnLeNVxsE2JOY4cFAkKASmSuWUNRVA0b3CnPL+LCSEiZuVWXorbtQYCZYeRkiOm4I7aQZ77cETLA2gIaFQHKU/m2xJ8XD4xhWG9V+bg1ql8WpyowWmxjIUApCG3OtjQjIc0k8HUfU9r0vFYywKCAQAZegttRkOPulsiqoOekLZvdokrHGJDUgvrtuuk613t5P44FNXZfC5nHDyInfCOp6FBEqad0hCW6y6Nqgh53ByPYBkcE5GpPC5hLgdn1CLUe3sTO3CTam4bPiJKZQy1XrDkkmqcW+kavLNqKs4FsHfcg/rdjClWK0xmpeSEdSKojkc1HWBNPYF4f4W9FgfXskpjs10yhA3tk8ZytKmQkF2taeKUJbtn4alRC90tLK1bSWao2jdE3nVqYWHxdIknkGDZCzyDmfhV04Nw40s2DHIg6DKzM0ucQfGE+tqwjTuB9oVZvfbFSsfPC2GNy9vr988dkqVleFQ+EFn9Ka+219nTAoIBAFRb0GjYxEpb1jIaUjwWGBgKN663dEqM9/sEscZXtR2+DZzKCbBLlu7/57uqUOpbsRmr7estRneDVyxUP4Cx3rbuoem2ulwOZwmRhqTHJAFzZECrYVbNNf6JPugb/RnKrY5sh2ubr/3l/QZ3j5/Sftzfb86wO9K1ZI5mPgbtpDo5/qwi2GAU7ZU9vmv4ndT9Wrb3ZBadW2KNgbbVKjcNjAHbkM3yMEFvaoOYOeDa4NXDUZLs3vg9Ovd5OIXbO0u8F31rRjFcbOmf6Y+uv3uSpCahSXrZWSp0MX6BKyKfg1r+Uv+PqaVqePXAIWffFOg92SpiK4ZAzKkSX5IZdzLI69MCggEBAIIDYf1pjC0J8R4vgeoAiR6rWH9m9aT8d+w+vx24FpHT2kAj8BR+JLchXbF2yQcYdu77hKLiY3eVeoAg9i+8ndVgLupZlyE8yWAwzwr9+Jil9EVN8//tsUE56soq2kS+2lbcCq2e/nZ4ukIpOQm0A6ZDtsm77UuxKqHSaUm58SbFok6I4Xhmr8WLTjpqxqv+8s2FYpQTO/CRnSx6JEuorQ/FmvhEeDQQHRpihWVL9pC7nknhmJ9y30bTBhQkRRXSM+CS0li913UNDSD1jwHUVi065oLTvTPhn88TaBV2T9kepeDl0ax2OconJzCQYyENvN/eBGY9hUKNVqm4vjVur7s=
+  id: dfa04a6a-5d2c-99a9-2b9a-c3a98cda2b59
+  name: active-sig
+  parentId: master
+  providerId: rsa
+  providerType: org.keycloak.keys.KeyProvider
+  subType: null
+  updated: false
+- config:
+    active: true
+    algorithm: RS256
+    certificate: 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
+    enabled: true
+    priority: 1
+    privateKey: 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
+  id: 982876ba-5da0-f76d-d9d5-e04243215c63
+  name: inactive-sig
+  parentId: master
+  providerId: rsa
+  providerType: org.keycloak.keys.KeyProvider
+  subType: null
+  updated: false
+- config:
+    active: true
+    algorithm: RSA-OAEP
+    certificate: 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
+    enabled: true
+    priority: 199
+    privateKey: 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
+  id: 870f781f-35b4-30fa-7737-f608335829d6
+  name: active-enc
+  parentId: master
+  providerId: rsa-enc
+  providerType: org.keycloak.keys.KeyProvider
+  subType: null
+  updated: false
+- config:
+    active: true
+    algorithm: RSA-OAEP
+    certificate: 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
+    enabled: true
+    priority: 0
+    privateKey: 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
+  id: ab104871-1e56-9a39-f440-5818203d31a0
+  name: inactive-enc
+  parentId: master
+  providerId: rsa-enc
+  providerType: org.keycloak.keys.KeyProvider
+  subType: null
+  updated: false
+- config:
+    algorithm: HS512
+    kid: 3d4a4165-7a68-4049-826a-9a873b8cf7d5
+    priority: -100
+    secret: yxn3Px_53SrB7fRlACU4LrQ_SXQC5ry6YtIfOOq2DQWVRfTzJ2OQfxrLgY44pAm5tNu6BEGyBWf5k6SEQq0QwoScn7D_nBBYabtR2m_fv28mxWHJjvomtTjGLRY7UFGryytBPwWBMSqL6YTU-qZh-3mwwfljKbiwJ5nN0lX7-k0
+  id: 6a56ed87-c42a-269d-c687-3ec8cc5e121c
+  name: fallback-HS512
+  parentId: master
+  providerId: hmac-generated
+  providerType: org.keycloak.keys.KeyProvider
+  subType: null
+  updated: false
+- config:
+    kid: 285ff696-18a9-4256-bec8-fa46ec501b31
+    priority: 100
+    secret: XdyRiD1pMmX63F-cwf5Q8g
+  id: null
+  name: aes-generated
+  parentId: null
+  providerId: aes-generated
+  providerType: null
+  subType: null
+  updated: false
+defaultClientScopeIds: []
+defaultGroupIds: []
+defaultLocale: de
+defaultRoleId: default-roles-master
+directGrantFlow: defaultDirectGrantFlow
+displayName: OIAM-Keycloak 27.1.13-24.0.3
+displayNameHtml: <div class="kc-logo-text"><span>OIAM-Keycloak 27.1.13-24.0.3</span></div>
+dockerAuthenticationFlow: defaultDockerFlow
+duplicateEmailsAllowed: false
+editUsernameAllowed: false
+emailTheme: defaultValue
+enabled: true
+enabledEventTypes:
+- UPDATE_CONSENT_ERROR
+- SEND_RESET_PASSWORD
+- GRANT_CONSENT
+- VERIFY_PROFILE_ERROR
+- UPDATE_TOTP
+- REMOVE_TOTP
+- REVOKE_GRANT
+- LOGIN_ERROR
+- CLIENT_LOGIN
+- RESET_PASSWORD_ERROR
+- IMPERSONATE_ERROR
+- CODE_TO_TOKEN_ERROR
+- CUSTOM_REQUIRED_ACTION
+- OAUTH2_DEVICE_CODE_TO_TOKEN_ERROR
+- RESTART_AUTHENTICATION
+- UPDATE_PROFILE_ERROR
+- IMPERSONATE
+- LOGIN
+- UPDATE_PASSWORD_ERROR
+- OAUTH2_DEVICE_VERIFY_USER_CODE
+- CLIENT_INITIATED_ACCOUNT_LINKING
+- USER_DISABLED_BY_PERMANENT_LOCKOUT
+- OAUTH2_EXTENSION_GRANT
+- TOKEN_EXCHANGE
+- REGISTER
+- LOGOUT
+- AUTHREQID_TO_TOKEN
+- DELETE_ACCOUNT_ERROR
+- CLIENT_REGISTER
+- IDENTITY_PROVIDER_LINK_ACCOUNT
+- USER_DISABLED_BY_TEMPORARY_LOCKOUT
+- UPDATE_PASSWORD
+- DELETE_ACCOUNT
+- FEDERATED_IDENTITY_LINK_ERROR
+- CLIENT_DELETE
+- IDENTITY_PROVIDER_FIRST_LOGIN
+- VERIFY_EMAIL
+- CLIENT_DELETE_ERROR
+- CLIENT_LOGIN_ERROR
+- RESTART_AUTHENTICATION_ERROR
+- REMOVE_FEDERATED_IDENTITY_ERROR
+- EXECUTE_ACTIONS
+- TOKEN_EXCHANGE_ERROR
+- PERMISSION_TOKEN
+- SEND_IDENTITY_PROVIDER_LINK_ERROR
+- EXECUTE_ACTION_TOKEN_ERROR
+- SEND_VERIFY_EMAIL
+- OAUTH2_EXTENSION_GRANT_ERROR
+- OAUTH2_DEVICE_AUTH
+- EXECUTE_ACTIONS_ERROR
+- REMOVE_FEDERATED_IDENTITY
+- OAUTH2_DEVICE_CODE_TO_TOKEN
+- IDENTITY_PROVIDER_POST_LOGIN
+- IDENTITY_PROVIDER_LINK_ACCOUNT_ERROR
+- UPDATE_EMAIL
+- OAUTH2_DEVICE_VERIFY_USER_CODE_ERROR
+- REGISTER_ERROR
+- REVOKE_GRANT_ERROR
+- LOGOUT_ERROR
+- UPDATE_EMAIL_ERROR
+- EXECUTE_ACTION_TOKEN
+- CLIENT_UPDATE_ERROR
+- UPDATE_PROFILE
+- AUTHREQID_TO_TOKEN_ERROR
+- FEDERATED_IDENTITY_LINK
+- CLIENT_REGISTER_ERROR
+- SEND_VERIFY_EMAIL_ERROR
+- SEND_IDENTITY_PROVIDER_LINK
+- RESET_PASSWORD
+- CLIENT_INITIATED_ACCOUNT_LINKING_ERROR
+- OAUTH2_DEVICE_AUTH_ERROR
+- UPDATE_CONSENT
+- REMOVE_TOTP_ERROR
+- VERIFY_EMAIL_ERROR
+- SEND_RESET_PASSWORD_ERROR
+- CLIENT_UPDATE
+- IDENTITY_PROVIDER_POST_LOGIN_ERROR
+- CUSTOM_REQUIRED_ACTION_ERROR
+- UPDATE_TOTP_ERROR
+- CODE_TO_TOKEN
+- VERIFY_PROFILE
+- GRANT_CONSENT_ERROR
+- IDENTITY_PROVIDER_FIRST_LOGIN_ERROR
+eventsEnabled: true
+eventsExpiration: 0
+eventsListeners:
+- metrics-listener
+- jboss-logging
+- siem
+firstBrokerLoginFlow: null
+hasClientInitialAccess: false
+id: master
+identityProviderMappers: []
+identityProviders: []
+internationalizationEnabled: true
+localizationTexts: {}
+loginTheme: keycloak
+loginWithEmailAllowed: false
+masterAdminClient: master-realm
+name: master
+notBefore: 0
+offlineSessionIdleTimeout: 2592000
+offlineSessionMaxLifespan: 5184000
+offlineSessionMaxLifespanEnabled: false
+optionalClientScopeIds:
+- profile
+- email
+- address
+- phone
+otpPolicy:
+  otpPolicyAlgorithm: HmacSHA1
+  otpPolicyCodeReusable: false
+  otpPolicyDigits: 6
+  otpPolicyInitialCounter: 0
+  otpPolicyLookAheadWindow: 1
+  otpPolicyPeriod: 30
+  otpPolicyType: totp
+  updated: false
+passwordPolicy: null
+refreshTokenMaxReuse: 0
+registrationAllowed: false
+registrationEmailAsUsername: false
+registrationFlow: defaultRegistrationFlow
+rememberMe: false
+requiredActionProviders:
+- alias: UPDATE_PASSWORD
+  config: null
+  defaultAction: false
+  enabled: true
+  id: update password
+  name: Update Password
+  priority: 30
+  providerId: UPDATE_PASSWORD
+  updated: false
+- alias: webauthn-register
+  config: null
+  defaultAction: false
+  enabled: true
+  id: webauthn register
+  name: Webauthn Register
+  priority: 70
+  providerId: webauthn-register
+  updated: false
+- alias: TERMS_AND_CONDITIONS
+  config: null
+  defaultAction: false
+  enabled: false
+  id: terms and conditions
+  name: Terms and Conditions
+  priority: 20
+  providerId: TERMS_AND_CONDITIONS
+  updated: false
+- alias: webauthn-register-passwordless
+  config: null
+  defaultAction: false
+  enabled: true
+  id: webauthn register passwordless
+  name: Webauthn Register Passwordless
+  priority: 80
+  providerId: webauthn-register-passwordless
+  updated: false
+- alias: CONFIGURE_TOTP
+  config: null
+  defaultAction: false
+  enabled: true
+  id: config totp
+  name: Configure OTP
+  priority: 10
+  providerId: CONFIGURE_TOTP
+  updated: false
+- alias: VERIFY_EMAIL
+  config: null
+  defaultAction: false
+  enabled: true
+  id: verify email
+  name: Verify Email
+  priority: 50
+  providerId: VERIFY_EMAIL
+  updated: false
+- alias: delete_account
+  config: null
+  defaultAction: false
+  enabled: false
+  id: delete account
+  name: Delete Account
+  priority: 60
+  providerId: delete_account
+  updated: false
+- alias: update_user_locale
+  config: null
+  defaultAction: false
+  enabled: true
+  id: update user locale
+  name: Update User Locale
+  priority: 1000
+  providerId: update_user_locale
+  updated: false
+- alias: UPDATE_PROFILE
+  config: null
+  defaultAction: false
+  enabled: true
+  id: update profile
+  name: Update Profile
+  priority: 40
+  providerId: UPDATE_PROFILE
+  updated: false
+requiredCredentials:
+- formLabel: password
+  input: true
+  secret: true
+  type: password
+  updated: false
+resetCredentialsFlow: defaultResetCredentialsFlow
+resetPasswordAllowed: false
+revokeRefreshToken: false
+smtpConfig: {}
+sslRequired: NONE
+ssoSessionIdleTimeout: 1800
+ssoSessionIdleTimeoutRememberMe: 0
+ssoSessionMaxLifespan: 36000
+ssoSessionMaxLifespanRememberMe: 0
+supportedLocales:
+- de
+updated: false
+verifyEmail: false
+webAuthnPolicy:
+  acceptableAaguids: []
+  attestationConveyancePreference: not specified
+  authenticatorAttachment: not specified
+  avoidSameAuthenticatorRegister: false
+  createTimeout: 0
+  extraOrigins: []
+  requireResidentKey: not specified
+  rpEntityName: keycloak
+  rpId: ''
+  signatureAlgorithms:
+  - ES256
+  updated: false
+  userVerificationRequirement: not specified
+webAuthnPolicyPasswordless:
+  acceptableAaguids: []
+  attestationConveyancePreference: not specified
+  authenticatorAttachment: not specified
+  avoidSameAuthenticatorRegister: false
+  createTimeout: 0
+  extraOrigins: []
+  requireResidentKey: not specified
+  rpEntityName: keycloak
+  rpId: ''
+  signatureAlgorithms:
+  - ES256
+  updated: false
+  userVerificationRequirement: not specified

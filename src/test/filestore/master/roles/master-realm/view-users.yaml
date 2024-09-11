@@ -1,0 +1,10 @@
+attributes: {}
+clientId: master-realm
+compositeRoles:
+- master-realm:query-groups
+- master-realm:query-users
+description: users
+id: master-realm:view-users
+name: view-users
+realmId: master
+updated: false

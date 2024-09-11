@@ -1,0 +1,33 @@
+attributes:
+  consent.screen.text: ${emailScopeConsentText}
+  display.on.consent.screen: true
+  include.in.token.scope: true
+description: 'OpenID Connect built-in scope: email'
+id: email
+name: email
+protocol: openid-connect
+protocolMappers:
+- config:
+    access.token.claim: 'true'
+    claim.name: email_verified
+    id.token.claim: 'true'
+    jsonType.label: boolean
+    user.attribute: emailVerified
+    userinfo.token.claim: 'true'
+  id: b3e0b4e3-0660-46a8-b0d7-e14cc9d5e9a5
+  isUpdated: false
+  name: email verified
+  protocolMapper: oidc-usermodel-property-mapper
+- config:
+    access.token.claim: 'true'
+    claim.name: email
+    id.token.claim: 'true'
+    jsonType.label: String
+    user.attribute: email
+    userinfo.token.claim: 'true'
+  id: 4337cf75-73b7-4f4e-aa73-5beda052897c
+  isUpdated: false
+  name: email
+  protocolMapper: oidc-usermodel-property-mapper
+realmId: master
+scopeMappings: []

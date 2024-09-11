@@ -1,0 +1,12 @@
+attributes: {}
+clientId: null
+compositeRoles:
+- account:manage-account
+- offline_access
+- account:view-profile
+- uma_authorization
+description: roles
+id: default-roles-master
+name: default-roles-master
+realmId: master
+updated: false

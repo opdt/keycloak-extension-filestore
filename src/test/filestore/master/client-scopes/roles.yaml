@@ -1,0 +1,36 @@
+attributes:
+  consent.screen.text: ${rolesScopeConsentText}
+  display.on.consent.screen: true
+  include.in.token.scope: false
+description: OpenID Connect scope for add user roles to the access token
+id: roles
+name: roles
+protocol: openid-connect
+protocolMappers:
+- config:
+    access.token.claim: 'true'
+    claim.name: realm_access.roles
+    jsonType.label: String
+    multivalued: 'true'
+    user.attribute: foo
+  id: 261eae3b-ce0a-4292-ba3e-ffb9cf132aa1
+  isUpdated: false
+  name: realm roles
+  protocolMapper: oidc-usermodel-realm-role-mapper
+- config:
+    access.token.claim: 'true'
+    claim.name: resource_access.${client_id}.roles
+    jsonType.label: String
+    multivalued: 'true'
+    user.attribute: foo
+  id: a3aebe4a-ec56-4aa9-ae93-f1b20b77cdee
+  isUpdated: false
+  name: client roles
+  protocolMapper: oidc-usermodel-client-role-mapper
+- config: {}
+  id: 8c66f428-72a5-4670-b542-a7e5c98a75d5
+  isUpdated: false
+  name: audience resolve
+  protocolMapper: oidc-audience-resolve-mapper
+realmId: master
+scopeMappings: []

@@ -1,0 +1,8 @@
+attributes: {}
+clientId: realm-management
+compositeRoles: []
+description: realms
+id: realm-management:query-realms
+name: query-realms
+realmId: master
+updated: false
