@@ -1,0 +1,8 @@
+attributes: {}
+clientId: realm-management
+compositeRoles: []
+description: authorization
+id: realm-management:view-authorization
+name: view-authorization
+realmId: master
+updated: false

@@ -1,0 +1,26 @@
+attributes: {}
+clientId: realm-management
+compositeRoles:
+- realm-management:create-client
+- realm-management:query-groups
+- realm-management:impersonation
+- realm-management:view-events
+- realm-management:manage-realm
+- realm-management:manage-authorization
+- realm-management:manage-identity-providers
+- realm-management:manage-users
+- realm-management:query-users
+- realm-management:view-clients
+- realm-management:view-realm
+- realm-management:manage-events
+- realm-management:manage-clients
+- realm-management:view-users
+- realm-management:view-identity-providers
+- realm-management:query-realms
+- realm-management:view-authorization
+- realm-management:query-clients
+description: admin
+id: realm-management:realm-admin
+name: realm-admin
+realmId: master
+updated: false

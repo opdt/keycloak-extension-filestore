@@ -1,0 +1,47 @@
+alwaysDisplayInConsole: false
+attributes:
+  post.logout.redirect.uris: +
+  pkce.code.challenge.method: S256
+authenticationFlowBindingOverrides: {}
+baseUrl: null
+bearerOnly: false
+clientAuthenticatorType: client-secret
+clientId: admin-cli
+clientScopes:
+  profile: false
+  email: false
+  address: false
+  phone: false
+consentRequired: false
+description: null
+directAccessGrantsEnabled: true
+enabled: true
+frontchannelLogout: false
+fullScopeAllowed: false
+id: admin-cli
+implicitFlowEnabled: false
+managementUrl: null
+multiValueAttributes:
+  post.logout.redirect.uris:
+  - +
+  pkce.code.challenge.method:
+  - S256
+name: admin-cli
+nodeReRegistrationTimeout: -1
+notBefore: 0
+protocol: openid-connect
+protocolMappers: []
+publicClient: true
+realmId: master
+redirectUris: []
+registrationToken: null
+rootUrl: null
+scope: []
+scopeMappings: []
+secret: null
+serviceAccountsEnabled: false
+standardFlowEnabled: true
+surrogateAuthRequired: false
+updated: false
+webOrigins:
+- +
