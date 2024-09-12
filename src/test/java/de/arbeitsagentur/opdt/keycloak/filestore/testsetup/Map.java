@@ -1,13 +1,37 @@
+/*
+ * Copyright 2024. IT-Systemhaus der Bundesagentur fuer Arbeit
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
 package de.arbeitsagentur.opdt.keycloak.filestore.testsetup;
 
 import com.google.common.collect.ImmutableSet;
 import de.arbeitsagentur.opdt.keycloak.filestore.DefaultFileDatastoreProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.client.FileClientProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.clientscope.FileClientScopeProviderFactory;
+import de.arbeitsagentur.opdt.keycloak.filestore.compat.HardcodedDeploymentStateProviderFactory;
+import de.arbeitsagentur.opdt.keycloak.filestore.compat.NullDeviceRepresentationProviderFactory;
+import de.arbeitsagentur.opdt.keycloak.filestore.compat.TestSingleUseObjectProviderFactory;
+import de.arbeitsagentur.opdt.keycloak.filestore.compat.TransientPublicKeyStorageProviderFactory;
+import de.arbeitsagentur.opdt.keycloak.filestore.events.FileEventStoreProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.group.FileGroupProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.realm.FileRealmProviderFactory;
-import de.arbeitsagentur.opdt.keycloak.filestore.role.FileRoleProviderFactory;
+
 import java.util.Set;
+
+import de.arbeitsagentur.opdt.keycloak.filestore.role.FileRoleProviderFactory;
 import org.keycloak.credential.CredentialSpi;
 import org.keycloak.credential.OTPCredentialProviderFactory;
 import org.keycloak.credential.PasswordCredentialProviderFactory;
@@ -62,40 +86,44 @@ public class Map extends KeycloakModelParameters {
 
   static final Set<Class<? extends ProviderFactory>> ALLOWED_FACTORIES =
       ImmutableSet.<Class<? extends ProviderFactory>>builder()
-          .add(FileClientProviderFactory.class)
-          .add(FileClientScopeProviderFactory.class)
-          .add(FileGroupProviderFactory.class)
-          .add(FileRoleProviderFactory.class)
-          .add(SingleUseObjectProviderFactory.class)
-          .add(DefaultClientPolicyManagerFactory.class)
-          .add(GeneratedAesKeyProviderFactory.class)
-          .add(GeneratedHmacKeyProviderFactory.class)
-          .add(GeneratedEcdsaKeyProviderFactory.class)
-          .add(ImportedRsaEncKeyProviderFactory.class)
-          .add(ImportedRsaKeyProviderFactory.class)
-          .add(GeneratedRsaEncKeyProviderFactory.class)
-          .add(GeneratedRsaKeyProviderFactory.class)
-          .add(ProtocolMappersClientRegistrationPolicyFactory.class)
-          .add(ClientDisabledClientRegistrationPolicyFactory.class)
-          .add(TrustedHostClientRegistrationPolicyFactory.class)
-          .add(ConsentRequiredClientRegistrationPolicyFactory.class)
-          .add(ClientScopesClientRegistrationPolicyFactory.class)
-          .add(ScopeClientRegistrationPolicyFactory.class)
-          .add(MaxClientsClientRegistrationPolicyFactory.class)
-          .add(OTPCredentialProviderFactory.class)
-          .add(PasswordCredentialProviderFactory.class)
-          .add(DefaultPasswordPolicyManagerProviderFactory.class)
-          .add(Pbkdf2Sha256PasswordHashProviderFactory.class)
-          .add(Pbkdf2Sha512PasswordHashProviderFactory.class)
-          .add(HashAlgorithmPasswordPolicyProviderFactory.class)
-          .add(HashIterationsPasswordPolicyProviderFactory.class)
-          .add(HistoryPasswordPolicyProviderFactory.class)
-          .add(ForceExpiredPasswordPolicyProviderFactory.class)
-          .add(DeviceRepresentationProviderFactoryImpl.class)
-          .add(DeclarativeUserProfileProviderFactory.class)
-          .add(ValidatorFactory.class)
-          .add(FileRealmProviderFactory.class)
-          .add(DefaultFileDatastoreProviderFactory.class)
+              .add(HardcodedDeploymentStateProviderFactory.class)
+              .add(SingleUseObjectProviderFactory.class)
+              .add(TransientPublicKeyStorageProviderFactory.class)
+              .add(DefaultClientPolicyManagerFactory.class)
+              .add(GeneratedAesKeyProviderFactory.class)
+              .add(GeneratedHmacKeyProviderFactory.class)
+              .add(GeneratedEcdsaKeyProviderFactory.class)
+              .add(ImportedRsaEncKeyProviderFactory.class)
+              .add(ImportedRsaKeyProviderFactory.class)
+              .add(GeneratedRsaEncKeyProviderFactory.class)
+              .add(GeneratedRsaKeyProviderFactory.class)
+              .add(ProtocolMappersClientRegistrationPolicyFactory.class)
+              .add(ClientDisabledClientRegistrationPolicyFactory.class)
+              .add(TrustedHostClientRegistrationPolicyFactory.class)
+              .add(ConsentRequiredClientRegistrationPolicyFactory.class)
+              .add(ClientScopesClientRegistrationPolicyFactory.class)
+              .add(ScopeClientRegistrationPolicyFactory.class)
+              .add(MaxClientsClientRegistrationPolicyFactory.class)
+              .add(OTPCredentialProviderFactory.class)
+              .add(PasswordCredentialProviderFactory.class)
+              .add(DefaultPasswordPolicyManagerProviderFactory.class)
+              .add(Pbkdf2Sha256PasswordHashProviderFactory.class)
+              .add(Pbkdf2Sha512PasswordHashProviderFactory.class)
+              .add(HashAlgorithmPasswordPolicyProviderFactory.class)
+              .add(HashIterationsPasswordPolicyProviderFactory.class)
+              .add(HistoryPasswordPolicyProviderFactory.class)
+              .add(ForceExpiredPasswordPolicyProviderFactory.class)
+              .add(DeclarativeUserProfileProviderFactory.class)
+              .add(NullDeviceRepresentationProviderFactory.class)
+              .add(DefaultFileDatastoreProviderFactory.class)
+              .add(TestSingleUseObjectProviderFactory.class)
+              .add(FileRealmProviderFactory.class)
+              .add(FileClientScopeProviderFactory.class)
+              .add(FileClientProviderFactory.class)
+              .add(FileEventStoreProviderFactory.class)
+              .add(FileGroupProviderFactory.class)
+              .add(FileRoleProviderFactory.class)
+              .add(ValidatorFactory.class)
           .build();
 
   public Map() {
@@ -161,6 +189,10 @@ public class Map extends KeycloakModelParameters {
         .provider(ImmutableAttributeValidator.ID)
         .provider(UsernameProhibitedCharactersValidator.ID)
         .provider(PersonNameProhibitedCharactersValidator.ID)
-        .provider(MultiValueValidator.ID);
+        .provider(MultiValueValidator.ID)
+        .spi(DeviceRepresentationSpi.NAME)
+        .defaultProvider(NullDeviceRepresentationProviderFactory.PROVIDER_ID)
+        .spi(SingleUseObjectSpi.NAME)
+        .defaultProvider("test");
   }
 }
