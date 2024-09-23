@@ -55,16 +55,12 @@ public class FileRealmProvider implements RealmProvider {
       throw new IllegalArgumentException("name cannot be null or empty");
     }
 
-    if (id != null && FileRealmStore.exists(id)) {
-      throw new ModelDuplicateException("Realm exists: " + id);
-    }
-
     if (getRealmByName(name) != null) {
       throw new ModelDuplicateException("Realm with given name exists: " + name);
     }
 
     FileRealmEntity entity = new FileRealmEntity();
-    entity.setId(id == null ? name : id);
+    entity.setId(name);
     entity.setName(name);
     return entityToAdapter(entity);
   }
