@@ -113,7 +113,7 @@ public abstract class FileClientAdapter extends AbstractClientModel<FileClientEn
 
   @Override
   public void setWebOrigins(Set<String> webOrigins) {
-    entity.setWebOrigins(webOrigins.stream().toList());
+    entity.setWebOrigins(new ArrayList<>(webOrigins.stream().toList()));
   }
 
   @Override
@@ -134,7 +134,7 @@ public abstract class FileClientAdapter extends AbstractClientModel<FileClientEn
 
   @Override
   public void setRedirectUris(Set<String> redirectUris) {
-    entity.setRedirectUris(redirectUris.stream().toList());
+    entity.setRedirectUris(new ArrayList<>(redirectUris.stream().toList()));
   }
 
   @Override

@@ -1455,7 +1455,7 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implem
 
   @Override
   public void setEventsListeners(Set<String> listeners) {
-    entity.setEventsListeners(listeners.stream().toList());
+    entity.setEventsListeners(new ArrayList<>(listeners.stream().toList()));
   }
 
   @Override
@@ -1466,7 +1466,7 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implem
 
   @Override
   public void setEnabledEventTypes(Set<String> enabledEventTypes) {
-    entity.setEnabledEventTypes(enabledEventTypes.stream().toList());
+    entity.setEnabledEventTypes(new ArrayList<>(enabledEventTypes.stream().toList()));
   }
 
   @Override
@@ -1545,7 +1545,7 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implem
 
   @Override
   public void setSupportedLocales(Set<String> locales) {
-    entity.setSupportedLocales(locales.stream().toList());
+    entity.setSupportedLocales(new ArrayList<>(locales.stream().toList()));
   }
 
   @Override

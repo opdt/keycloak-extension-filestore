@@ -17,9 +17,11 @@
 
 package de.arbeitsagentur.opdt.keycloak.filestore.events;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class FileAdminEventInMemoryStore {
 
@@ -32,7 +34,7 @@ public class FileAdminEventInMemoryStore {
   }
 
   public static List<FileAdminEventEntity> readAll() {
-    return cache.values().stream().toList();
+    return new ArrayList<>(cache.values());
   }
 
   public static void create(FileAdminEventEntity entity) {

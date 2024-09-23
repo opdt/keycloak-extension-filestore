@@ -27,6 +27,7 @@ import de.arbeitsagentur.opdt.keycloak.filestore.role.FileRoleEntity;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -149,7 +150,7 @@ public final class EntityStore {
       return STORE.values().stream()
           .filter(v -> interfaceOfEntity.isAssignableFrom(v.getClass()))
           .map(interfaceOfEntity::cast)
-          .collect(Collectors.toList());
+          .collect(Collectors.toCollection(ArrayList::new));
     } finally {
       LOCK.readLock().unlock();
     }
