@@ -63,7 +63,7 @@ class FileRealmProviderTest extends KeycloakModelTest {
         KeycloakSession::realms,
         (realms, realm) -> {
           assertThatExceptionOfType(ModelDuplicateException.class)
-              .isThrownBy(() -> realms.createRealm(REALM_ID, "unknown"));
+              .isThrownBy(() -> realms.createRealm(REALM_ID, REALM_ID));
         });
   }
 
