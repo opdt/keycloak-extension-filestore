@@ -30,6 +30,7 @@ import de.arbeitsagentur.opdt.keycloak.filestore.role.FileRoleEntity;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -40,6 +41,8 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import org.apache.commons.text.StringSubstitutor;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.yaml.snakeyaml.DumperOptions;
@@ -96,7 +99,7 @@ public class EntityIO {
     loaderoptions.setTagInspector(tag -> false);
 
     Constructor constructor =
-        new KeycloakEnvScalarConstructor(
+        new Constructor(
             new TypeDescription(interfaceOfEntity), null, loaderoptions);
 
     DumperOptions options = new DumperOptions();
@@ -111,13 +114,14 @@ public class EntityIO {
         .setBeanAccess(BeanAccess.FIELD); // Avoid circular dependencies when using setters
 
     Yaml yaml = new Yaml(constructor, representer);
-    yaml.addImplicitResolver(EnvScalarConstructor.ENV_TAG, ENV_FORMAT, "$");
 
-    try (InputStream inputStream = new FileInputStream(fileName.toString())) {
-      return yaml.load(inputStream);
+    try {
+        String rawYaml = Files.readString(fileName, StandardCharsets.UTF_8);
+        String substitutedYaml = new StringSubstitutor(System::getenv).replace(rawYaml);
+
+        return yaml.load(substitutedYaml);
     } catch (Exception e) {
-      LOG.error("Error with reading file: " + fileName.toString(), e);
-      return null;
+        throw new IllegalStateException("Failed to parse file: " + fileName, e);
     }
   }
 
