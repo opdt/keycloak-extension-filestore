@@ -110,7 +110,7 @@ public class FileClientScopeProvider implements ClientScopeProvider {
         .collect(
             Collectors
                 .toSet()) // This is necessary to read out all the client IDs before removing the
-                          // clients
+        // clients
         .forEach(id -> removeClientScope(realm, id));
   }
 

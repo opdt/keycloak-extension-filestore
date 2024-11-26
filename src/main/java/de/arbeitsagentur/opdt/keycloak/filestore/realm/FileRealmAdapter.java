@@ -35,6 +35,7 @@ import org.keycloak.component.ComponentModel;
 import org.keycloak.component.ComponentValidationException;
 import org.keycloak.models.*;
 import org.keycloak.models.utils.ComponentUtil;
+import org.keycloak.representations.idm.RealmRepresentation;
 
 public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implements RealmModel {
 
@@ -52,6 +53,7 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implem
   private static final String FAILURE_FACTOR = "failureFactor";
 
   private static final String MAX_TEMPORARY_LOCKOUTS = "maxTemporaryLockouts";
+  private static final String BRUTE_FORCE_STRATEGY = "bruteForceStrategy";
 
   private PasswordPolicy passwordPolicy;
 
@@ -1105,6 +1107,11 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implem
   @Override
   public void removeIdentityProviderByAlias(String alias) {
     IdentityProviderModel model = getIdentityProviderByAlias(alias);
+
+    if (model == null) {
+      return;
+    }
+
     entity.removeIdentityProvider(model.getInternalId());
     session
         .getKeycloakSessionFactory()
@@ -1748,6 +1755,20 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implem
   @Override
   public void setMaxTemporaryLockouts(int i) {
     setAttribute(MAX_TEMPORARY_LOCKOUTS, i);
+  }
+
+  @Override
+  public RealmRepresentation.BruteForceStrategy getBruteForceStrategy() {
+    String strategy = getAttribute(BRUTE_FORCE_STRATEGY);
+    return strategy == null
+        ? RealmRepresentation.BruteForceStrategy.MULTIPLE
+        : RealmRepresentation.BruteForceStrategy.valueOf(strategy);
+  }
+
+  @Override
+  public void setBruteForceStrategy(RealmRepresentation.BruteForceStrategy bruteForceStrategy) {
+    setAttribute(
+        BRUTE_FORCE_STRATEGY, bruteForceStrategy == null ? null : bruteForceStrategy.name());
   }
 
   @Override

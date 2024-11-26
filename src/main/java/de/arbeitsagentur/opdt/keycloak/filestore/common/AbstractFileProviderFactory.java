@@ -36,9 +36,9 @@ public abstract class AbstractFileProviderFactory<T extends Provider, V extends 
   private final int factoryId = SessionAttributesUtils.grabNewFactoryIdentifier();
 
   protected final Class<M> modelType;
-  private final Class<T> providerType;
+  private final Class<? extends T> providerType;
 
-  protected AbstractFileProviderFactory(Class<M> modelType, Class<T> providerType) {
+  protected AbstractFileProviderFactory(Class<M> modelType, Class<? extends T> providerType) {
     this.modelType = modelType;
     this.providerType = providerType;
   }

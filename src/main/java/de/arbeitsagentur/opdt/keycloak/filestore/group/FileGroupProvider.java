@@ -242,10 +242,18 @@ public class FileGroupProvider implements GroupProvider {
 
   @Override
   public GroupModel createGroup(RealmModel realm, String id, String name, GroupModel toParent) {
-    LOG.tracef("createGroup(%s, %s, %s, %s)%s", realm, id, name, toParent, getShortStackTrace());
+    return createGroup(realm, id, GroupModel.Type.REALM, name, toParent);
+  }
+
+  @Override
+  public GroupModel createGroup(
+      RealmModel realm, String id, GroupModel.Type type, String name, GroupModel toParent) {
+    LOG.tracef(
+        "createGroup(%s, %s, %s, %s, %s)%s", realm, id, type, name, toParent, getShortStackTrace());
     FileGroupStore.readAll().stream()
         .filter(group -> realm.getId().equals(group.getRealmId()))
         .filter(group -> name.equals(group.getName()))
+        .filter(group -> group.getType().equals(type))
         .filter(
             group ->
                 toParent == null

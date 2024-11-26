@@ -42,41 +42,38 @@ public class NullInfinispanClusterProviderFactory
 
   @Override
   public ClusterProvider create(KeycloakSession session) {
-    return
-            new ClusterProvider() {
-              @Override
-              public int getClusterStartupTime() {
-                return 0;
-              }
+    return new ClusterProvider() {
+      @Override
+      public int getClusterStartupTime() {
+        return 0;
+      }
 
-              @Override
-              public <T> ExecutionResult<T> executeIfNotExecuted(
-                  String taskKey, int taskTimeoutInSeconds, Callable<T> task) {
-                return null;
-              }
+      @Override
+      public <T> ExecutionResult<T> executeIfNotExecuted(
+          String taskKey, int taskTimeoutInSeconds, Callable<T> task) {
+        return null;
+      }
 
-              @Override
-              public Future<Boolean> executeIfNotExecutedAsync(
-                  String taskKey, int taskTimeoutInSeconds, Callable task) {
-                return null;
-              }
+      @Override
+      public Future<Boolean> executeIfNotExecutedAsync(
+          String taskKey, int taskTimeoutInSeconds, Callable task) {
+        return null;
+      }
 
-              @Override
-              public void registerListener(String taskKey, ClusterListener task) {}
+      @Override
+      public void registerListener(String taskKey, ClusterListener task) {}
 
-              @Override
-              public void notify(
-                  String taskKey, ClusterEvent event, boolean ignoreSender, DCNotify dcNotify) {}
+      @Override
+      public void notify(
+          String taskKey, ClusterEvent event, boolean ignoreSender, DCNotify dcNotify) {}
 
-              @Override
-              public void close() {}
-            };
+      @Override
+      public void close() {}
+    };
   }
 
   @Override
-  public void init(Config.Scope config) {
-
-  }
+  public void init(Config.Scope config) {}
 
   @Override
   public void postInit(KeycloakSessionFactory factory) {}

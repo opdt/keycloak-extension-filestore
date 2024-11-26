@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.keycloak.models.GroupModel;
 
 public class FileGroupEntity implements AbstractEntity, UpdatableEntity {
 
@@ -32,6 +33,7 @@ public class FileGroupEntity implements AbstractEntity, UpdatableEntity {
   private String name;
   private String parentId;
   private String realmId;
+  private GroupModel.Type type;
   private List<String> grantedRoles = new ArrayList<>();
 
   public String getId() {
@@ -124,5 +126,17 @@ public class FileGroupEntity implements AbstractEntity, UpdatableEntity {
   public void removeGrantedRole(String role) {
     this.grantedRoles.remove(role);
     FileGroupStore.update(this);
+  }
+
+  public GroupModel.Type getType() {
+    if (type == null) {
+      return GroupModel.Type.REALM;
+    }
+
+    return type;
+  }
+
+  public void setType(GroupModel.Type type) {
+    this.type = type;
   }
 }

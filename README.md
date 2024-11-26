@@ -9,3 +9,6 @@ Initially forked from Keycloak's own experimental version.
 Intended to be used in read-only filesystems, for example mounted K8s-configmaps (but can also be used to interactively create the configuration by using the admin console)
 To use this, you most likely have to implement your own `DatastoreProvider` and mix it with a different implementation to store users, sessions etc.
 
+# Caveats
+
+This extension currently does NOT support Keycloak Organizations and thus must be run with the corresponding feature flag turned off.

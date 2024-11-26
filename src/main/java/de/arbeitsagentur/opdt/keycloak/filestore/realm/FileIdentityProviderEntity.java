@@ -34,6 +34,7 @@ public class FileIdentityProviderEntity implements AbstractEntity, UpdatableEnti
   private String providerId;
   private String firstBrokerLoginFlowId;
   private String postBrokerLoginFlowId;
+  private String organizationId;
   private Boolean enabled = false;
   private Boolean trustEmail = false;
   private Boolean storeToken = false;
@@ -60,6 +61,7 @@ public class FileIdentityProviderEntity implements AbstractEntity, UpdatableEnti
     entity.setAddReadTokenRoleOnCreate(model.isAddReadTokenRoleOnCreate());
     entity.setAuthenticateByDefault(model.isAuthenticateByDefault());
     entity.setConfig(model.getConfig());
+    entity.setOrganizationId(model.getOrganizationId());
     return entity;
   }
 
@@ -88,6 +90,7 @@ public class FileIdentityProviderEntity implements AbstractEntity, UpdatableEnti
     model.setAuthenticateByDefault(authenticateByDefault == null ? false : authenticateByDefault);
     Map<String, String> config = entity.getConfig();
     model.setConfig(config == null ? new HashMap<>() : new HashMap<>(config));
+    model.setOrganizationId(entity.getOrganizationId());
     return model;
   }
 
@@ -227,5 +230,13 @@ public class FileIdentityProviderEntity implements AbstractEntity, UpdatableEnti
 
   public Boolean getAuthenticateByDefault() {
     return authenticateByDefault;
+  }
+
+  public String getOrganizationId() {
+    return organizationId;
+  }
+
+  public void setOrganizationId(String organizationId) {
+    this.organizationId = organizationId;
   }
 }

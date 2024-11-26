@@ -55,8 +55,8 @@ public class SessionAttributesUtils {
   public static <T extends Provider> T createProviderIfAbsent(
       KeycloakSession session,
       int factoryIdentifier,
-      Class<T> providerClass,
-      Function<KeycloakSession, T> createNew) {
+      Class<? extends T> providerClass,
+      Function<KeycloakSession, ? extends T> createNew) {
     String uniqueKey = providerClass.getName() + factoryIdentifier;
     T provider = session.getAttribute(uniqueKey, providerClass);
     if (provider != null) {

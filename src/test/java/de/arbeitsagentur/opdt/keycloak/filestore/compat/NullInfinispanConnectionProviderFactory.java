@@ -21,8 +21,11 @@ import static org.keycloak.userprofile.DeclarativeUserProfileProviderFactory.PRO
 
 import com.google.auto.service.AutoService;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ScheduledExecutorService;
 import org.infinispan.Cache;
 import org.infinispan.client.hotrod.RemoteCache;
+import org.infinispan.util.concurrent.BlockingManager;
 import org.keycloak.Config;
 import org.keycloak.connections.infinispan.InfinispanConnectionProvider;
 import org.keycloak.connections.infinispan.InfinispanConnectionProviderFactory;
@@ -44,37 +47,49 @@ public class NullInfinispanConnectionProviderFactory
 
   @Override
   public InfinispanConnectionProvider create(KeycloakSession session) {
-    return
-            new InfinispanConnectionProvider() {
-              @Override
-              public <K, V> Cache<K, V> getCache(String s) {
-                return null;
-              }
+    return new InfinispanConnectionProvider() {
+      @Override
+      public <K, V> Cache<K, V> getCache(String s) {
+        return null;
+      }
 
-              @Override
-              public <K, V> Cache<K, V> getCache(String s, boolean b) {
-                return null;
-              }
+      @Override
+      public <K, V> Cache<K, V> getCache(String s, boolean b) {
+        return null;
+      }
 
-              @Override
-              public <K, V> RemoteCache<K, V> getRemoteCache(String s) {
-                return null;
-              }
+      @Override
+      public <K, V> RemoteCache<K, V> getRemoteCache(String s) {
+        return null;
+      }
 
-              @Override
-              public TopologyInfo getTopologyInfo() {
-                return null;
-              }
+      @Override
+      public TopologyInfo getTopologyInfo() {
+        return null;
+      }
 
-              @Override
-              public void close() {}
-            };
+      @Override
+      public CompletionStage<Void> migrateToProtoStream() {
+        return null;
+      }
+
+      @Override
+      public ScheduledExecutorService getScheduledExecutor() {
+        return null;
+      }
+
+      @Override
+      public BlockingManager getBlockingManager() {
+        return null;
+      }
+
+      @Override
+      public void close() {}
+    };
   }
 
   @Override
-  public void init(Config.Scope config) {
-
-  }
+  public void init(Config.Scope config) {}
 
   @Override
   public void postInit(KeycloakSessionFactory factory) {}
