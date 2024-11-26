@@ -27,11 +27,10 @@ import de.arbeitsagentur.opdt.keycloak.filestore.compat.TestSingleUseObjectProvi
 import de.arbeitsagentur.opdt.keycloak.filestore.compat.TransientPublicKeyStorageProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.events.FileEventStoreProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.group.FileGroupProviderFactory;
+import de.arbeitsagentur.opdt.keycloak.filestore.identityProvider.FileIdentityProviderStorageProviderFactory;
 import de.arbeitsagentur.opdt.keycloak.filestore.realm.FileRealmProviderFactory;
-
-import java.util.Set;
-
 import de.arbeitsagentur.opdt.keycloak.filestore.role.FileRoleProviderFactory;
+import java.util.Set;
 import org.keycloak.credential.CredentialSpi;
 import org.keycloak.credential.OTPCredentialProviderFactory;
 import org.keycloak.credential.PasswordCredentialProviderFactory;
@@ -41,6 +40,7 @@ import org.keycloak.credential.hash.Pbkdf2Sha512PasswordHashProviderFactory;
 import org.keycloak.device.DeviceRepresentationProviderFactoryImpl;
 import org.keycloak.device.DeviceRepresentationSpi;
 import org.keycloak.keys.*;
+import org.keycloak.models.IdentityProviderStorageSpi;
 import org.keycloak.models.PasswordPolicy;
 import org.keycloak.models.SingleUseObjectProviderFactory;
 import org.keycloak.models.SingleUseObjectSpi;
@@ -82,48 +82,50 @@ public class Map extends KeycloakModelParameters {
           .add(DeviceRepresentationSpi.class)
           .add(UserProfileSpi.class)
           .add(ValidatorSPI.class)
+          .add(IdentityProviderStorageSpi.class)
           .build();
 
   static final Set<Class<? extends ProviderFactory>> ALLOWED_FACTORIES =
       ImmutableSet.<Class<? extends ProviderFactory>>builder()
-              .add(HardcodedDeploymentStateProviderFactory.class)
-              .add(SingleUseObjectProviderFactory.class)
-              .add(TransientPublicKeyStorageProviderFactory.class)
-              .add(DefaultClientPolicyManagerFactory.class)
-              .add(GeneratedAesKeyProviderFactory.class)
-              .add(GeneratedHmacKeyProviderFactory.class)
-              .add(GeneratedEcdsaKeyProviderFactory.class)
-              .add(ImportedRsaEncKeyProviderFactory.class)
-              .add(ImportedRsaKeyProviderFactory.class)
-              .add(GeneratedRsaEncKeyProviderFactory.class)
-              .add(GeneratedRsaKeyProviderFactory.class)
-              .add(ProtocolMappersClientRegistrationPolicyFactory.class)
-              .add(ClientDisabledClientRegistrationPolicyFactory.class)
-              .add(TrustedHostClientRegistrationPolicyFactory.class)
-              .add(ConsentRequiredClientRegistrationPolicyFactory.class)
-              .add(ClientScopesClientRegistrationPolicyFactory.class)
-              .add(ScopeClientRegistrationPolicyFactory.class)
-              .add(MaxClientsClientRegistrationPolicyFactory.class)
-              .add(OTPCredentialProviderFactory.class)
-              .add(PasswordCredentialProviderFactory.class)
-              .add(DefaultPasswordPolicyManagerProviderFactory.class)
-              .add(Pbkdf2Sha256PasswordHashProviderFactory.class)
-              .add(Pbkdf2Sha512PasswordHashProviderFactory.class)
-              .add(HashAlgorithmPasswordPolicyProviderFactory.class)
-              .add(HashIterationsPasswordPolicyProviderFactory.class)
-              .add(HistoryPasswordPolicyProviderFactory.class)
-              .add(ForceExpiredPasswordPolicyProviderFactory.class)
-              .add(DeclarativeUserProfileProviderFactory.class)
-              .add(NullDeviceRepresentationProviderFactory.class)
-              .add(DefaultFileDatastoreProviderFactory.class)
-              .add(TestSingleUseObjectProviderFactory.class)
-              .add(FileRealmProviderFactory.class)
-              .add(FileClientScopeProviderFactory.class)
-              .add(FileClientProviderFactory.class)
-              .add(FileEventStoreProviderFactory.class)
-              .add(FileGroupProviderFactory.class)
-              .add(FileRoleProviderFactory.class)
-              .add(ValidatorFactory.class)
+          .add(HardcodedDeploymentStateProviderFactory.class)
+          .add(SingleUseObjectProviderFactory.class)
+          .add(TransientPublicKeyStorageProviderFactory.class)
+          .add(DefaultClientPolicyManagerFactory.class)
+          .add(GeneratedAesKeyProviderFactory.class)
+          .add(GeneratedHmacKeyProviderFactory.class)
+          .add(GeneratedEcdsaKeyProviderFactory.class)
+          .add(ImportedRsaEncKeyProviderFactory.class)
+          .add(ImportedRsaKeyProviderFactory.class)
+          .add(GeneratedRsaEncKeyProviderFactory.class)
+          .add(GeneratedRsaKeyProviderFactory.class)
+          .add(ProtocolMappersClientRegistrationPolicyFactory.class)
+          .add(ClientDisabledClientRegistrationPolicyFactory.class)
+          .add(TrustedHostClientRegistrationPolicyFactory.class)
+          .add(ConsentRequiredClientRegistrationPolicyFactory.class)
+          .add(ClientScopesClientRegistrationPolicyFactory.class)
+          .add(ScopeClientRegistrationPolicyFactory.class)
+          .add(MaxClientsClientRegistrationPolicyFactory.class)
+          .add(OTPCredentialProviderFactory.class)
+          .add(PasswordCredentialProviderFactory.class)
+          .add(DefaultPasswordPolicyManagerProviderFactory.class)
+          .add(Pbkdf2Sha256PasswordHashProviderFactory.class)
+          .add(Pbkdf2Sha512PasswordHashProviderFactory.class)
+          .add(HashAlgorithmPasswordPolicyProviderFactory.class)
+          .add(HashIterationsPasswordPolicyProviderFactory.class)
+          .add(HistoryPasswordPolicyProviderFactory.class)
+          .add(ForceExpiredPasswordPolicyProviderFactory.class)
+          .add(DeclarativeUserProfileProviderFactory.class)
+          .add(NullDeviceRepresentationProviderFactory.class)
+          .add(DefaultFileDatastoreProviderFactory.class)
+          .add(TestSingleUseObjectProviderFactory.class)
+          .add(FileRealmProviderFactory.class)
+          .add(FileClientScopeProviderFactory.class)
+          .add(FileClientProviderFactory.class)
+          .add(FileEventStoreProviderFactory.class)
+          .add(FileGroupProviderFactory.class)
+          .add(FileRoleProviderFactory.class)
+          .add(FileIdentityProviderStorageProviderFactory.class)
+          .add(ValidatorFactory.class)
           .build();
 
   public Map() {

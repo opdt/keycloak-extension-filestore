@@ -174,7 +174,7 @@ public class FileClientProvider implements ClientProvider {
         .collect(
             Collectors
                 .toSet()) // This is necessary to read out all the client IDs before removing the
-                          // clients
+        // clients
         .forEach(cid -> removeClient(realm, cid));
   }
 

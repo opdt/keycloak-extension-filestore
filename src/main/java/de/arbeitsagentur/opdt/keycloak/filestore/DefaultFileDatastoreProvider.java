@@ -72,4 +72,9 @@ public class DefaultFileDatastoreProvider extends DefaultDatastoreProvider {
   public RoleProvider roleStorageManager() {
     return roles();
   }
+
+  @Override
+  public IdentityProviderStorageProvider identityProviders() {
+    return session.getProvider(IdentityProviderStorageProvider.class, "file");
+  }
 }

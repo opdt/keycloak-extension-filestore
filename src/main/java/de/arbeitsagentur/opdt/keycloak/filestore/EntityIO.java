@@ -18,7 +18,6 @@
 package de.arbeitsagentur.opdt.keycloak.filestore;
 
 import static java.util.Map.entry;
-import static org.yaml.snakeyaml.env.EnvScalarConstructor.ENV_FORMAT;
 
 import de.arbeitsagentur.opdt.keycloak.filestore.client.FileClientEntity;
 import de.arbeitsagentur.opdt.keycloak.filestore.clientscope.FileClientScopeEntity;
@@ -27,9 +26,7 @@ import de.arbeitsagentur.opdt.keycloak.filestore.common.UpdatableEntity;
 import de.arbeitsagentur.opdt.keycloak.filestore.group.FileGroupEntity;
 import de.arbeitsagentur.opdt.keycloak.filestore.realm.FileRealmEntity;
 import de.arbeitsagentur.opdt.keycloak.filestore.role.FileRoleEntity;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,7 +38,6 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
 import org.apache.commons.text.StringSubstitutor;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
@@ -50,7 +46,6 @@ import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.env.EnvScalarConstructor;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
@@ -99,8 +94,7 @@ public class EntityIO {
     loaderoptions.setTagInspector(tag -> false);
 
     Constructor constructor =
-        new Constructor(
-            new TypeDescription(interfaceOfEntity), null, loaderoptions);
+        new Constructor(new TypeDescription(interfaceOfEntity), null, loaderoptions);
 
     DumperOptions options = new DumperOptions();
     options.setIndent(4);
@@ -116,12 +110,12 @@ public class EntityIO {
     Yaml yaml = new Yaml(constructor, representer);
 
     try {
-        String rawYaml = Files.readString(fileName, StandardCharsets.UTF_8);
-        String substitutedYaml = new StringSubstitutor(System::getenv).replace(rawYaml);
+      String rawYaml = Files.readString(fileName, StandardCharsets.UTF_8);
+      String substitutedYaml = new StringSubstitutor(System::getenv).replace(rawYaml);
 
-        return yaml.load(substitutedYaml);
+      return yaml.load(substitutedYaml);
     } catch (Exception e) {
-        throw new IllegalStateException("Failed to parse file: " + fileName, e);
+      throw new IllegalStateException("Failed to parse file: " + fileName, e);
     }
   }
 

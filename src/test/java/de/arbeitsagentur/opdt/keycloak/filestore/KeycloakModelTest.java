@@ -134,7 +134,10 @@ public abstract class KeycloakModelTest {
                         cn -> {
                           try {
                             return Class.forName(
-                                cn.indexOf('.') >= 0 ? cn : ("de.arbeitsagentur.opdt.keycloak.filestore.testsetup." + cn));
+                                cn.indexOf('.') >= 0
+                                    ? cn
+                                    : ("de.arbeitsagentur.opdt.keycloak.filestore.testsetup."
+                                        + cn));
                           } catch (Exception e) {
                             LOG.error("Cannot find " + cn);
                             return null;

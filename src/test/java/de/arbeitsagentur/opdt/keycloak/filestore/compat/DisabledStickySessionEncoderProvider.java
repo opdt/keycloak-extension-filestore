@@ -88,4 +88,9 @@ public class DisabledStickySessionEncoderProvider
   public Map<String, String> getOperationalInfo() {
     return Map.of("implementation", "disabled (cassandra-extension)");
   }
+
+  @Override
+  public void setShouldAttachRoute(boolean b) {
+    // do nothing
+  }
 }
