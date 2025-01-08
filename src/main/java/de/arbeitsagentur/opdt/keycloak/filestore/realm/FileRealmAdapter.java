@@ -37,7 +37,8 @@ import org.keycloak.models.*;
 import org.keycloak.models.utils.ComponentUtil;
 import org.keycloak.representations.idm.RealmRepresentation;
 
-public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity> implements RealmModel {
+public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity>
+    implements StorageProviderRealmModel {
 
   private static final Logger LOG = Logger.getLogger(FileRealmAdapter.class);
   private static final String ACTION_TOKEN_GENERATED_BY_USER_LIFESPAN =
