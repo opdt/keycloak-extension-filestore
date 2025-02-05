@@ -112,6 +112,9 @@ public class FileRealmEntity implements AbstractEntity, UpdatableEntity {
   private boolean hasClientInitialAccess = false;
   private Boolean organizationsEnabled;
 
+  private Boolean adminPermissionsEnabled;
+  private Boolean verifiableCredentialsEnabled;
+
   public FileRealmEntity() {}
 
   @Override
@@ -1255,5 +1258,21 @@ public class FileRealmEntity implements AbstractEntity, UpdatableEntity {
   public void setOrganizationsEnabled(Boolean organizationsEnabled) {
     this.organizationsEnabled = organizationsEnabled;
     FileRealmStore.update(this);
+  }
+
+  public Boolean isAdminPermissionsEnabled() {
+    return adminPermissionsEnabled;
+  }
+
+  public void setAdminPermissionsEnabled(Boolean adminPermissionsEnabled) {
+    this.adminPermissionsEnabled = adminPermissionsEnabled;
+  }
+
+  public Boolean isVerifiableCredentialsEnabled() {
+    return verifiableCredentialsEnabled;
+  }
+
+  public void setVerifiableCredentialsEnabled(Boolean verifiableCredentialsEnabled) {
+    this.verifiableCredentialsEnabled = verifiableCredentialsEnabled;
   }
 }
