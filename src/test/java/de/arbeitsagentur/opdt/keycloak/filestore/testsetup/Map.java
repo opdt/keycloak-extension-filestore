@@ -53,6 +53,8 @@ import org.keycloak.services.clientregistration.policy.ClientRegistrationPolicyS
 import org.keycloak.services.clientregistration.policy.impl.*;
 import org.keycloak.sessions.AuthenticationSessionSpi;
 import org.keycloak.storage.DatastoreSpi;
+import org.keycloak.tracing.NoopTracingProviderFactory;
+import org.keycloak.tracing.TracingSpi;
 import org.keycloak.userprofile.DeclarativeUserProfileProviderFactory;
 import org.keycloak.userprofile.UserProfileSpi;
 import org.keycloak.userprofile.validator.*;
@@ -83,6 +85,7 @@ public class Map extends KeycloakModelParameters {
           .add(UserProfileSpi.class)
           .add(ValidatorSPI.class)
           .add(IdentityProviderStorageSpi.class)
+          .add(TracingSpi.class)
           .build();
 
   static final Set<Class<? extends ProviderFactory>> ALLOWED_FACTORIES =
@@ -126,6 +129,7 @@ public class Map extends KeycloakModelParameters {
           .add(FileRoleProviderFactory.class)
           .add(FileIdentityProviderStorageProviderFactory.class)
           .add(ValidatorFactory.class)
+          .add(NoopTracingProviderFactory.class)
           .build();
 
   public Map() {

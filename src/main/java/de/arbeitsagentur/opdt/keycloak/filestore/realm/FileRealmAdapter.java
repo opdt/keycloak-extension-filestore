@@ -55,6 +55,7 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity>
 
   private static final String MAX_TEMPORARY_LOCKOUTS = "maxTemporaryLockouts";
   private static final String BRUTE_FORCE_STRATEGY = "bruteForceStrategy";
+  public static final String ADMIN_PERMISSIONS_CLIENT_ID = "adminPermissionsClientId";
 
   private PasswordPolicy passwordPolicy;
 
@@ -183,6 +184,28 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity>
   @Override
   public void setOrganizationsEnabled(boolean organizationsEnabled) {
     entity.setOrganizationsEnabled(organizationsEnabled);
+  }
+
+  @Override
+  public boolean isAdminPermissionsEnabled() {
+    Boolean value = entity.isAdminPermissionsEnabled();
+    return value == null ? false : value;
+  }
+
+  @Override
+  public void setAdminPermissionsEnabled(boolean adminPermissionsEnabled) {
+    entity.setAdminPermissionsEnabled(adminPermissionsEnabled);
+  }
+
+  @Override
+  public boolean isVerifiableCredentialsEnabled() {
+    Boolean value = entity.isVerifiableCredentialsEnabled();
+    return value == null ? false : value;
+  }
+
+  @Override
+  public void setVerifiableCredentialsEnabled(boolean verifiableCredentialsEnabled) {
+    entity.setVerifiableCredentialsEnabled(verifiableCredentialsEnabled);
   }
 
   @Override
@@ -1526,6 +1549,19 @@ public class FileRealmAdapter extends AbstractRealmModel<FileRealmEntity>
   @Override
   public void setDefaultRole(RoleModel role) {
     entity.setDefaultRoleId(role.getId());
+  }
+
+  @Override
+  public ClientModel getAdminPermissionsClient() {
+    if (getAttribute(ADMIN_PERMISSIONS_CLIENT_ID) == null) {
+      return null;
+    }
+    return session.clients().getClientById(this, getAttribute(ADMIN_PERMISSIONS_CLIENT_ID));
+  }
+
+  @Override
+  public void setAdminPermissionsClient(ClientModel client) {
+    setAttribute(ADMIN_PERMISSIONS_CLIENT_ID, client.getId());
   }
 
   @Override
