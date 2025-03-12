@@ -42,35 +42,35 @@ import org.keycloak.provider.ProviderEventListener;
 @AutoService(RealmProviderFactory.class)
 public class JpaRealmProviderFactory implements RealmProviderFactory, ProviderEventListener {
 
-  private Runnable onClose;
+    private Runnable onClose;
 
-  public static final String PROVIDER_ID = "jpa";
-  public static final int PROVIDER_PRIORITY = 1;
+    public static final String PROVIDER_ID = "jpa";
+    public static final int PROVIDER_PRIORITY = 1;
 
-  @Override
-  public void init(Config.Scope config) {}
+    @Override
+    public void init(Config.Scope config) {}
 
-  @Override
-  public void postInit(KeycloakSessionFactory factory) {}
+    @Override
+    public void postInit(KeycloakSessionFactory factory) {}
 
-  @Override
-  public String getId() {
-    return PROVIDER_ID;
-  }
+    @Override
+    public String getId() {
+        return PROVIDER_ID;
+    }
 
-  @Override
-  public RealmProvider create(KeycloakSession session) {
-    return null;
-  }
+    @Override
+    public RealmProvider create(KeycloakSession session) {
+        return null;
+    }
 
-  @Override
-  public void close() {}
+    @Override
+    public void close() {}
 
-  @Override
-  public void onEvent(ProviderEvent event) {}
+    @Override
+    public void onEvent(ProviderEvent event) {}
 
-  @Override
-  public int order() {
-    return PROVIDER_PRIORITY + 1;
-  }
+    @Override
+    public int order() {
+        return PROVIDER_PRIORITY + 1;
+    }
 }

@@ -22,31 +22,30 @@ import org.keycloak.models.ClientScopeModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
-public abstract class AbstractClientScopeModel<E extends AbstractEntity>
-    implements ClientScopeModel {
+public abstract class AbstractClientScopeModel<E extends AbstractEntity> implements ClientScopeModel {
 
-  protected final KeycloakSession session;
-  protected final RealmModel realm;
-  protected final E entity;
+    protected final KeycloakSession session;
+    protected final RealmModel realm;
+    protected final E entity;
 
-  public AbstractClientScopeModel(KeycloakSession session, RealmModel realm, E entity) {
-    Objects.requireNonNull(entity, "entity");
-    Objects.requireNonNull(realm, "realm");
-    this.session = session;
-    this.realm = realm;
-    this.entity = entity;
-  }
+    public AbstractClientScopeModel(KeycloakSession session, RealmModel realm, E entity) {
+        Objects.requireNonNull(entity, "entity");
+        Objects.requireNonNull(realm, "realm");
+        this.session = session;
+        this.realm = realm;
+        this.entity = entity;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof ClientScopeModel)) return false;
-    ClientScopeModel that = (ClientScopeModel) o;
-    return Objects.equals(that.getId(), getId());
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClientScopeModel)) return false;
+        ClientScopeModel that = (ClientScopeModel) o;
+        return Objects.equals(that.getId(), getId());
+    }
 
-  @Override
-  public int hashCode() {
-    return getId().hashCode();
-  }
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }

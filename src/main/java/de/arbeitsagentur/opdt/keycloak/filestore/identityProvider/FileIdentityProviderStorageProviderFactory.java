@@ -10,28 +10,28 @@ import org.keycloak.models.KeycloakSessionFactory;
 
 @AutoService(IdentityProviderStorageProviderFactory.class)
 public class FileIdentityProviderStorageProviderFactory
-    implements IdentityProviderStorageProviderFactory<FileIdentityProviderStorageProvider> {
-  @Override
-  public FileIdentityProviderStorageProvider create(KeycloakSession session) {
-    return new FileIdentityProviderStorageProvider(session);
-  }
+        implements IdentityProviderStorageProviderFactory<FileIdentityProviderStorageProvider> {
+    @Override
+    public FileIdentityProviderStorageProvider create(KeycloakSession session) {
+        return new FileIdentityProviderStorageProvider(session);
+    }
 
-  @Override
-  public void init(Config.Scope config) {}
+    @Override
+    public void init(Config.Scope config) {}
 
-  @Override
-  public void postInit(KeycloakSessionFactory factory) {}
+    @Override
+    public void postInit(KeycloakSessionFactory factory) {}
 
-  @Override
-  public void close() {}
+    @Override
+    public void close() {}
 
-  @Override
-  public String getId() {
-    return "file";
-  }
+    @Override
+    public String getId() {
+        return "file";
+    }
 
-  @Override
-  public int order() {
-    return PROVIDER_PRIORITY + 1;
-  }
+    @Override
+    public int order() {
+        return PROVIDER_PRIORITY + 1;
+    }
 }

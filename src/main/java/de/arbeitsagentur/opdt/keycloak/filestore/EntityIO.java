@@ -51,247 +51,228 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 public class EntityIO {
-  public static final String ID_COMPONENT_SEPARATOR = ":";
-  public static final Pattern ID_COMPONENT_SEPARATOR_PATTERN =
-      Pattern.compile(Pattern.quote(ID_COMPONENT_SEPARATOR) + "+");
-  private static final Pattern RESERVED_CHARACTERS = Pattern.compile("[%<:>\"/\\\\|?*=]");
-  private static final String STORAGE_CONTEXT = "mapStorage";
-  private static final String STORAGE_TYPE = "file";
-  private static final String ESCAPING_CHARACTER = "=";
-  public static final String FILE_SUFFIX = ".yaml";
-  private static final Logger LOG = Logger.getLogger(EntityIO.class);
+    public static final String ID_COMPONENT_SEPARATOR = ":";
+    public static final Pattern ID_COMPONENT_SEPARATOR_PATTERN =
+            Pattern.compile(Pattern.quote(ID_COMPONENT_SEPARATOR) + "+");
+    private static final Pattern RESERVED_CHARACTERS = Pattern.compile("[%<:>\"/\\\\|?*=]");
+    private static final String STORAGE_CONTEXT = "mapStorage";
+    private static final String STORAGE_TYPE = "file";
+    private static final String ESCAPING_CHARACTER = "=";
+    public static final String FILE_SUFFIX = ".yaml";
+    private static final Logger LOG = Logger.getLogger(EntityIO.class);
 
-  static final Map<Class<? extends AbstractEntity>, Function<? extends AbstractEntity, String[]>>
-      UNIQUE_HUMAN_READABLE_NAME_FIELD =
-          Map.ofEntries(
-              entry(
-                  FileRealmEntity.class,
-                  ((Function<FileRealmEntity, String[]>) v -> new String[] {v.getName()})),
-              entry(
-                  FileClientEntity.class,
-                  ((Function<FileClientEntity, String[]>) v -> new String[] {v.getClientId()})),
-              entry(
-                  FileClientScopeEntity.class,
-                  ((Function<FileClientScopeEntity, String[]>) v -> new String[] {v.getName()})),
-              entry(
-                  FileGroupEntity.class,
-                  ((Function<FileGroupEntity, String[]>)
-                      v ->
-                          v.getParentId() == null
-                              ? new String[] {v.getName()}
-                              : new String[] {v.getParentId(), v.getName()})),
-              entry(
-                  FileRoleEntity.class,
-                  ((Function<FileRoleEntity, String[]>)
-                      (v ->
-                          v.getClientId() == null
-                              ? new String[] {v.getName()}
-                              : new String[] {v.getClientId(), v.getName()}))));
+    static final Map<Class<? extends AbstractEntity>, Function<? extends AbstractEntity, String[]>>
+            UNIQUE_HUMAN_READABLE_NAME_FIELD = Map.ofEntries(
+                    entry(FileRealmEntity.class, ((Function<FileRealmEntity, String[]>)
+                            v -> new String[] {v.getName()})),
+                    entry(FileClientEntity.class, ((Function<FileClientEntity, String[]>)
+                            v -> new String[] {v.getClientId()})),
+                    entry(FileClientScopeEntity.class, ((Function<FileClientScopeEntity, String[]>)
+                            v -> new String[] {v.getName()})),
+                    entry(FileGroupEntity.class, ((Function<FileGroupEntity, String[]>) v -> v.getParentId() == null
+                            ? new String[] {v.getName()}
+                            : new String[] {v.getParentId(), v.getName()})),
+                    entry(FileRoleEntity.class, ((Function<FileRoleEntity, String[]>) (v -> v.getClientId() == null
+                            ? new String[] {v.getName()}
+                            : new String[] {v.getClientId(), v.getName()}))));
 
-  static <E extends AbstractEntity & UpdatableEntity> E yamlParseFile(
-      Path fileName, Class<E> interfaceOfEntity) {
-    var loaderoptions = new LoaderOptions();
-    loaderoptions.setTagInspector(tag -> false);
+    static <E extends AbstractEntity & UpdatableEntity> E yamlParseFile(Path fileName, Class<E> interfaceOfEntity) {
+        var loaderoptions = new LoaderOptions();
+        loaderoptions.setTagInspector(tag -> false);
 
-    Constructor constructor =
-        new Constructor(new TypeDescription(interfaceOfEntity), null, loaderoptions);
+        Constructor constructor = new Constructor(new TypeDescription(interfaceOfEntity), null, loaderoptions);
 
-    DumperOptions options = new DumperOptions();
-    options.setIndent(4);
-    options.setIndicatorIndent(2);
-    options.setIndentWithIndicator(false);
+        DumperOptions options = new DumperOptions();
+        options.setIndent(4);
+        options.setIndicatorIndent(2);
+        options.setIndentWithIndicator(false);
 
-    Representer representer = new Representer(options);
-    representer.getPropertyUtils().setSkipMissingProperties(true);
-    representer
-        .getPropertyUtils()
-        .setBeanAccess(BeanAccess.FIELD); // Avoid circular dependencies when using setters
+        Representer representer = new Representer(options);
+        representer.getPropertyUtils().setSkipMissingProperties(true);
+        representer
+                .getPropertyUtils()
+                .setBeanAccess(BeanAccess.FIELD); // Avoid circular dependencies when using setters
 
-    Yaml yaml = new Yaml(constructor, representer);
+        Yaml yaml = new Yaml(constructor, representer);
 
-    try {
-      String rawYaml = Files.readString(fileName, StandardCharsets.UTF_8);
-      String substitutedYaml = new StringSubstitutor(System::getenv).replace(rawYaml);
+        try {
+            String rawYaml = Files.readString(fileName, StandardCharsets.UTF_8);
+            String substitutedYaml = new StringSubstitutor(System::getenv).replace(rawYaml);
 
-      return yaml.load(substitutedYaml);
-    } catch (Exception e) {
-      throw new IllegalStateException("Failed to parse file: " + fileName, e);
-    }
-  }
-
-  static <E extends AbstractEntity & UpdatableEntity> void writeToFile(E entity, Path path)
-      throws IOException {
-    var loaderoptions = new LoaderOptions();
-    loaderoptions.setTagInspector(tag -> false);
-    Constructor constructor = new Constructor(entity.getClass(), loaderoptions);
-
-    DumperOptions options = new DumperOptions();
-    options.setIndent(4);
-    options.setIndicatorIndent(2);
-    options.setIndentWithIndicator(false);
-
-    Representer representer = new Representer(options);
-    representer.getPropertyUtils().setSkipMissingProperties(true);
-    representer.addClassTag(Set.class, Tag.SEQ);
-
-    Yaml yaml = new Yaml(constructor, representer);
-    String output = yaml.dumpAs(entity, Tag.MAP, DumperOptions.FlowStyle.BLOCK);
-
-    if (!Files.exists(path.getParent())) {
-      Files.createDirectories(path.getParent());
+            return yaml.load(substitutedYaml);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to parse file: " + fileName, e);
+        }
     }
 
-    Files.write(path, output.getBytes());
-  }
+    static <E extends AbstractEntity & UpdatableEntity> void writeToFile(E entity, Path path) throws IOException {
+        var loaderoptions = new LoaderOptions();
+        loaderoptions.setTagInspector(tag -> false);
+        Constructor constructor = new Constructor(entity.getClass(), loaderoptions);
 
-  static <E extends AbstractEntity & UpdatableEntity> E parseFile(
-      Path fileName, Class<E> interfaceOfEntity) {
-    final E parsedObject = yamlParseFile(fileName, interfaceOfEntity);
-    if (parsedObject == null) {
-      return null;
+        DumperOptions options = new DumperOptions();
+        options.setIndent(4);
+        options.setIndicatorIndent(2);
+        options.setIndentWithIndicator(false);
+
+        Representer representer = new Representer(options);
+        representer.getPropertyUtils().setSkipMissingProperties(true);
+        representer.addClassTag(Set.class, Tag.SEQ);
+
+        Yaml yaml = new Yaml(constructor, representer);
+        String output = yaml.dumpAs(entity, Tag.MAP, DumperOptions.FlowStyle.BLOCK);
+
+        if (!Files.exists(path.getParent())) {
+            Files.createDirectories(path.getParent());
+        }
+
+        Files.write(path, output.getBytes());
     }
 
-    final String fileNameStr = fileName.getFileName().toString();
-    final String idFromFilename =
-        fileNameStr.substring(0, fileNameStr.length() - FILE_SUFFIX.length());
-    String escapedId = determineKeyFromValue(parsedObject, interfaceOfEntity, idFromFilename);
+    static <E extends AbstractEntity & UpdatableEntity> E parseFile(Path fileName, Class<E> interfaceOfEntity) {
+        final E parsedObject = yamlParseFile(fileName, interfaceOfEntity);
+        if (parsedObject == null) {
+            return null;
+        }
 
-    if (escapedId == null) {
-      LOG.tracef("Determined ID from filename: %s%s", idFromFilename);
-      escapedId = idFromFilename;
-    } else if (!escapedId.endsWith(idFromFilename)) {
-      LOG.warnf(
-          "Id \"%s\" does not conform with filename \"%s\", expected: %s",
-          escapedId, fileNameStr, escapeId(escapedId));
+        final String fileNameStr = fileName.getFileName().toString();
+        final String idFromFilename = fileNameStr.substring(0, fileNameStr.length() - FILE_SUFFIX.length());
+        String escapedId = determineKeyFromValue(parsedObject, interfaceOfEntity, idFromFilename);
+
+        if (escapedId == null) {
+            LOG.tracef("Determined ID from filename: %s%s", idFromFilename);
+            escapedId = idFromFilename;
+        } else if (!escapedId.endsWith(idFromFilename)) {
+            LOG.warnf(
+                    "Id \"%s\" does not conform with filename \"%s\", expected: %s",
+                    escapedId, fileNameStr, escapeId(escapedId));
+        }
+
+        if (parsedObject.getId() == null) {
+            parsedObject.setId(escapedId);
+        }
+
+        parsedObject.clearUpdatedFlag();
+        return parsedObject;
     }
 
-    if (parsedObject.getId() == null) {
-      parsedObject.setId(escapedId);
+    private static <E extends AbstractEntity & UpdatableEntity> String determineKeyFromValue(
+            E value, Class<E> interfaceOfEntity, String lastIdComponentIfUnset) {
+        String[] proposedId = getSuggestedPath(value, interfaceOfEntity);
+        if (proposedId == null || proposedId.length == 0) {
+            return lastIdComponentIfUnset;
+        } else if (proposedId[proposedId.length - 1] == null) {
+            proposedId[proposedId.length - 1] = lastIdComponentIfUnset;
+        }
+
+        String[] escapedProposedId = escapeId(proposedId);
+        final String res = String.join(ID_COMPONENT_SEPARATOR, escapedProposedId);
+
+        if (LOG.isTraceEnabled()) {
+            LOG.tracef(
+                    "determineKeyFromValue: got %s (%s) for %s",
+                    res, res == null ? null : String.join(" [/] ", proposedId), value);
+        }
+
+        return res;
     }
 
-    parsedObject.clearUpdatedFlag();
-    return parsedObject;
-  }
+    private static <E extends AbstractEntity & UpdatableEntity> String[] getSuggestedPath(E entity, Class<E> clazz) {
+        Function<E, String[]> fileNameByEntity = ((Function<E, String[]>) UNIQUE_HUMAN_READABLE_NAME_FIELD.get(clazz));
+        if (fileNameByEntity == null) {
+            fileNameByEntity = e -> e.getId() == null ? null : new String[] {e.getId()};
+        }
 
-  private static <E extends AbstractEntity & UpdatableEntity> String determineKeyFromValue(
-      E value, Class<E> interfaceOfEntity, String lastIdComponentIfUnset) {
-    String[] proposedId = getSuggestedPath(value, interfaceOfEntity);
-    if (proposedId == null || proposedId.length == 0) {
-      return lastIdComponentIfUnset;
-    } else if (proposedId[proposedId.length - 1] == null) {
-      proposedId[proposedId.length - 1] = lastIdComponentIfUnset;
+        return fileNameByEntity.apply(entity);
     }
 
-    String[] escapedProposedId = escapeId(proposedId);
-    final String res = String.join(ID_COMPONENT_SEPARATOR, escapedProposedId);
+    public static String[] escapeId(String[] idArray) {
+        if (idArray == null || idArray.length == 0 || idArray.length == 1 && idArray[0] == null) {
+            return null;
+        }
 
-    if (LOG.isTraceEnabled()) {
-      LOG.tracef(
-          "determineKeyFromValue: got %s (%s) for %s",
-          res, res == null ? null : String.join(" [/] ", proposedId), value);
+        return Stream.of(idArray).map(EntityIO::escapeId).toArray(String[]::new);
     }
 
-    return res;
-  }
+    public static String escapeId(String id) {
+        Objects.requireNonNull(id, "ID must be non-null");
+        StringBuilder idEscaped = new StringBuilder();
+        Matcher m = RESERVED_CHARACTERS.matcher(id);
 
-  private static <E extends AbstractEntity & UpdatableEntity> String[] getSuggestedPath(
-      E entity, Class<E> clazz) {
-    Function<E, String[]> fileNameByEntity =
-        ((Function<E, String[]>) UNIQUE_HUMAN_READABLE_NAME_FIELD.get(clazz));
-    if (fileNameByEntity == null) {
-      fileNameByEntity = e -> e.getId() == null ? null : new String[] {e.getId()};
+        while (m.find()) {
+            m.appendReplacement(idEscaped, String.format(ESCAPING_CHARACTER + "%02x", (int)
+                    m.group().charAt(0)));
+        }
+
+        m.appendTail(idEscaped);
+        final Path pId = Path.of(idEscaped.toString());
+        return pId.toString();
     }
 
-    return fileNameByEntity.apply(entity);
-  }
+    public static Path getPathForIdAndParentPath(String escapedId, Path parentPath) {
+        String[] escapedIdArray = ID_COMPONENT_SEPARATOR_PATTERN.split(escapedId);
+        Path parentDirectory = parentPath;
+        Path targetPath = parentDirectory;
 
-  public static String[] escapeId(String[] idArray) {
-    if (idArray == null || idArray.length == 0 || idArray.length == 1 && idArray[0] == null) {
-      return null;
+        for (String path : escapedIdArray) {
+            targetPath = targetPath.resolve(path).normalize();
+            if (!targetPath.getParent().equals(parentDirectory)) {
+                LOG.warnf("Path traversal detected: %s", Arrays.toString(escapedIdArray));
+                return null;
+            }
+            parentDirectory = targetPath;
+        }
+
+        return targetPath.resolveSibling(targetPath.getFileName() + FILE_SUFFIX);
     }
 
-    return Stream.of(idArray).map(EntityIO::escapeId).toArray(String[]::new);
-  }
+    public static Path getRootDirectory() {
+        String[] scopes = {STORAGE_CONTEXT, STORAGE_TYPE};
+        String root = Config.scope(scopes).get("dir");
 
-  public static String escapeId(String id) {
-    Objects.requireNonNull(id, "ID must be non-null");
-    StringBuilder idEscaped = new StringBuilder();
-    Matcher m = RESERVED_CHARACTERS.matcher(id);
+        if (root == null) {
+            String scopesString = String.join(",", scopes);
+            throw new IllegalStateException(
+                    "Map Storage file directory not found. This indicates that the environment variable is not set for this scope combination: "
+                            + scopesString);
+        }
 
-    while (m.find()) {
-      m.appendReplacement(
-          idEscaped, String.format(ESCAPING_CHARACTER + "%02x", (int) m.group().charAt(0)));
+        return Path.of(root);
     }
 
-    m.appendTail(idEscaped);
-    final Path pId = Path.of(idEscaped.toString());
-    return pId.toString();
-  }
+    public static boolean canParseFile(Path p) {
+        if (p == null) {
+            return false;
+        }
 
-  public static Path getPathForIdAndParentPath(String escapedId, Path parentPath) {
-    String[] escapedIdArray = ID_COMPONENT_SEPARATOR_PATTERN.split(escapedId);
-    Path parentDirectory = parentPath;
-    Path targetPath = parentDirectory;
-
-    for (String path : escapedIdArray) {
-      targetPath = targetPath.resolve(path).normalize();
-      if (!targetPath.getParent().equals(parentDirectory)) {
-        LOG.warnf("Path traversal detected: %s", Arrays.toString(escapedIdArray));
-        return null;
-      }
-      parentDirectory = targetPath;
+        final String fn = p.getFileName().toString();
+        try {
+            return Files.isRegularFile(p)
+                    && Files.size(p) > 0L
+                    && !fn.startsWith(".")
+                    && fn.endsWith(FILE_SUFFIX)
+                    && Files.isReadable(p);
+        } catch (IOException ex) {
+            return false;
+        }
     }
 
-    return targetPath.resolveSibling(targetPath.getFileName() + FILE_SUFFIX);
-  }
-
-  public static Path getRootDirectory() {
-    String[] scopes = {STORAGE_CONTEXT, STORAGE_TYPE};
-    String root = Config.scope(scopes).get("dir");
-
-    if (root == null) {
-      String scopesString = String.join(",", scopes);
-      throw new IllegalStateException(
-          "Map Storage file directory not found. This indicates that the environment variable is not set for this scope combination: "
-              + scopesString);
+    public static void deleteParentDirectoryIfEmpty(Path directory) throws IOException {
+        Path parentDir = directory.getParent();
+        while (parentDir != null && isDirectoryEmpty(parentDir)) {
+            Files.delete(parentDir);
+            parentDir = parentDir.getParent();
+        }
     }
 
-    return Path.of(root);
-  }
+    public static boolean isDirectoryEmpty(Path directory) throws IOException {
+        boolean isEmpty = false;
+        if (Files.isDirectory(directory)) {
+            try (Stream<Path> entries = Files.list(directory)) {
+                isEmpty = entries.findFirst().isEmpty();
+            }
+        }
 
-  public static boolean canParseFile(Path p) {
-    if (p == null) {
-      return false;
+        return isEmpty;
     }
-
-    final String fn = p.getFileName().toString();
-    try {
-      return Files.isRegularFile(p)
-          && Files.size(p) > 0L
-          && !fn.startsWith(".")
-          && fn.endsWith(FILE_SUFFIX)
-          && Files.isReadable(p);
-    } catch (IOException ex) {
-      return false;
-    }
-  }
-
-  public static void deleteParentDirectoryIfEmpty(Path directory) throws IOException {
-    Path parentDir = directory.getParent();
-    while (parentDir != null && isDirectoryEmpty(parentDir)) {
-      Files.delete(parentDir);
-      parentDir = parentDir.getParent();
-    }
-  }
-
-  public static boolean isDirectoryEmpty(Path directory) throws IOException {
-    boolean isEmpty = false;
-    if (Files.isDirectory(directory)) {
-      try (Stream<Path> entries = Files.list(directory)) {
-        isEmpty = entries.findFirst().isEmpty();
-      }
-    }
-
-    return isEmpty;
-  }
 }

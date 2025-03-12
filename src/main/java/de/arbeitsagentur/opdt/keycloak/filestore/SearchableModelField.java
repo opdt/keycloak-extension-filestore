@@ -21,24 +21,25 @@ package de.arbeitsagentur.opdt.keycloak.filestore;
  */
 public class SearchableModelField<M> {
 
-  private final String name;
-  private final Class<?> fieldClass;
+    private final String name;
+    private final Class<?> fieldClass;
 
-  public SearchableModelField(String name, Class<?> fieldClass) {
-    this.name = name;
-    this.fieldClass = fieldClass;
-  }
+    public SearchableModelField(String name, Class<?> fieldClass) {
+        this.name = name;
+        this.fieldClass = fieldClass;
+    }
 
-  public String getName() {
-    return this.name;
-  }
+    public String getName() {
+        return this.name;
+    }
 
-  public Class<?> getFieldType() {
-    return fieldClass;
-  }
+    public Class<?> getFieldType() {
+        return fieldClass;
+    }
 
-  @Override
-  public String toString() {
-    return "SearchableModelField " + name + " @ " + getClass().getTypeParameters()[0].getTypeName();
-  }
+    @Override
+    public String toString() {
+        return "SearchableModelField " + name + " @ "
+                + getClass().getTypeParameters()[0].getTypeName();
+    }
 }

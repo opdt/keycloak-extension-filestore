@@ -23,25 +23,25 @@ import org.keycloak.models.RealmModel;
 
 public abstract class AbstractRealmModel<E extends AbstractEntity> implements RealmModel {
 
-  protected final KeycloakSession session;
-  protected final E entity;
+    protected final KeycloakSession session;
+    protected final E entity;
 
-  public AbstractRealmModel(KeycloakSession session, E entity) {
-    Objects.requireNonNull(entity, "entity");
-    this.session = session;
-    this.entity = entity;
-  }
+    public AbstractRealmModel(KeycloakSession session, E entity) {
+        Objects.requireNonNull(entity, "entity");
+        this.session = session;
+        this.entity = entity;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof RealmModel)) return false;
-    RealmModel that = (RealmModel) o;
-    return Objects.equals(that.getId(), getId());
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RealmModel)) return false;
+        RealmModel that = (RealmModel) o;
+        return Objects.equals(that.getId(), getId());
+    }
 
-  @Override
-  public int hashCode() {
-    return getId().hashCode();
-  }
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }

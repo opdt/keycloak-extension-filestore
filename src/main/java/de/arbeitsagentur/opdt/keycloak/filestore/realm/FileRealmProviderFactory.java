@@ -25,40 +25,37 @@ import org.keycloak.provider.InvalidationHandler;
 
 @AutoService(RealmProviderFactory.class)
 public class FileRealmProviderFactory
-    extends AbstractFileProviderFactory<FileRealmProvider, FileRealmEntity, RealmModel>
-    implements RealmProviderFactory<FileRealmProvider>, InvalidationHandler {
+        extends AbstractFileProviderFactory<FileRealmProvider, FileRealmEntity, RealmModel>
+        implements RealmProviderFactory<FileRealmProvider>, InvalidationHandler {
 
-  public FileRealmProviderFactory() {
-    super(RealmModel.class, FileRealmProvider.class);
-  }
+    public FileRealmProviderFactory() {
+        super(RealmModel.class, FileRealmProvider.class);
+    }
 
-  @Override
-  public FileRealmProvider createNew(KeycloakSession session) {
-    return new FileRealmProvider(session);
-  }
+    @Override
+    public FileRealmProvider createNew(KeycloakSession session) {
+        return new FileRealmProvider(session);
+    }
 
-  @Override
-  public String getHelpText() {
-    return "Realm provider";
-  }
+    @Override
+    public String getHelpText() {
+        return "Realm provider";
+    }
 
-  @Override
-  public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
-    if (type == MapProviderObjectType.REALM_AFTER_REMOVE) {
-      session
-          .getKeycloakSessionFactory()
-          .publish(
-              new RealmModel.RealmRemovedEvent() {
+    @Override
+    public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
+        if (type == MapProviderObjectType.REALM_AFTER_REMOVE) {
+            session.getKeycloakSessionFactory().publish(new RealmModel.RealmRemovedEvent() {
                 @Override
                 public RealmModel getRealm() {
-                  return (RealmModel) params[0];
+                    return (RealmModel) params[0];
                 }
 
                 @Override
                 public KeycloakSession getKeycloakSession() {
-                  return session;
+                    return session;
                 }
-              });
+            });
+        }
     }
-  }
 }

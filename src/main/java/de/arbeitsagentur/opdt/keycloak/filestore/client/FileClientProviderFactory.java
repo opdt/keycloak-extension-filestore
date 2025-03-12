@@ -28,47 +28,44 @@ import org.keycloak.provider.InvalidationHandler;
  */
 @AutoService(ClientProviderFactory.class)
 public class FileClientProviderFactory
-    extends AbstractFileProviderFactory<FileClientProvider, FileClientEntity, ClientModel>
-    implements ClientProviderFactory<FileClientProvider>, InvalidationHandler {
+        extends AbstractFileProviderFactory<FileClientProvider, FileClientEntity, ClientModel>
+        implements ClientProviderFactory<FileClientProvider>, InvalidationHandler {
 
-  private final ConcurrentHashMap<String, ConcurrentMap<String, Long>> REGISTERED_NODES_STORE =
-      new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ConcurrentMap<String, Long>> REGISTERED_NODES_STORE =
+            new ConcurrentHashMap<>();
 
-  public FileClientProviderFactory() {
-    super(ClientModel.class, FileClientProvider.class);
-  }
+    public FileClientProviderFactory() {
+        super(ClientModel.class, FileClientProvider.class);
+    }
 
-  @Override
-  public FileClientProvider createNew(KeycloakSession session) {
-    return new FileClientProvider(session, REGISTERED_NODES_STORE);
-  }
+    @Override
+    public FileClientProvider createNew(KeycloakSession session) {
+        return new FileClientProvider(session, REGISTERED_NODES_STORE);
+    }
 
-  @Override
-  public String getHelpText() {
-    return "Client provider";
-  }
+    @Override
+    public String getHelpText() {
+        return "Client provider";
+    }
 
-  @Override
-  public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
-    if (type == MapProviderObjectType.REALM_BEFORE_REMOVE) {
-      create(session).preRemove((RealmModel) params[0]);
-    } else if (type == MapProviderObjectType.ROLE_BEFORE_REMOVE) {
-      create(session).preRemove((RealmModel) params[0], (RoleModel) params[1]);
-    } else if (type == MapProviderObjectType.CLIENT_AFTER_REMOVE) {
-      session
-          .getKeycloakSessionFactory()
-          .publish(
-              new ClientModel.ClientRemovedEvent() {
+    @Override
+    public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
+        if (type == MapProviderObjectType.REALM_BEFORE_REMOVE) {
+            create(session).preRemove((RealmModel) params[0]);
+        } else if (type == MapProviderObjectType.ROLE_BEFORE_REMOVE) {
+            create(session).preRemove((RealmModel) params[0], (RoleModel) params[1]);
+        } else if (type == MapProviderObjectType.CLIENT_AFTER_REMOVE) {
+            session.getKeycloakSessionFactory().publish(new ClientModel.ClientRemovedEvent() {
                 @Override
                 public ClientModel getClient() {
-                  return (ClientModel) params[0];
+                    return (ClientModel) params[0];
                 }
 
                 @Override
                 public KeycloakSession getKeycloakSession() {
-                  return session;
+                    return session;
                 }
-              });
+            });
+        }
     }
-  }
 }

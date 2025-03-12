@@ -38,131 +38,117 @@ import java.util.stream.Stream;
 import org.jboss.logging.Logger;
 
 public final class EntityStore {
-  private static final Logger LOG = Logger.getLogger(EntityStore.class);
+    private static final Logger LOG = Logger.getLogger(EntityStore.class);
 
-  private static final Map<Path, AbstractEntity> STORE = new ConcurrentHashMap<>();
-  private static final ReadWriteLock LOCK = new ReentrantReadWriteLock();
+    private static final Map<Path, AbstractEntity> STORE = new ConcurrentHashMap<>();
+    private static final ReadWriteLock LOCK = new ReentrantReadWriteLock();
 
-  static {
-    Path dataDirectory = EntityIO.getRootDirectory();
-    try (Stream<Path> realmsStream = Files.walk(dataDirectory, 1)) {
-      realmsStream
-          .filter(EntityIO::canParseFile)
-          .forEach(path -> STORE.put(path, EntityIO.parseFile(path, FileRealmEntity.class)));
+    static {
+        Path dataDirectory = EntityIO.getRootDirectory();
+        try (Stream<Path> realmsStream = Files.walk(dataDirectory, 1)) {
+            realmsStream
+                    .filter(EntityIO::canParseFile)
+                    .forEach(path -> STORE.put(path, EntityIO.parseFile(path, FileRealmEntity.class)));
 
-      for (AbstractEntity abstractEntity : STORE.values()) {
-        if (abstractEntity instanceof FileRealmEntity realm) {
-          Path clients = dataDirectory.resolve(realm.getId()).resolve("clients");
-          if (clients.toFile().exists()) {
-            try (Stream<Path> clientsStream = Files.walk(clients, 1)) {
-              clientsStream
-                  .filter(EntityIO::canParseFile)
-                  .forEach(
-                      path -> {
-                        FileClientEntity entity = EntityIO.parseFile(path, FileClientEntity.class);
-                        entity.setRealmId(realm.getId());
-                        STORE.put(path, entity);
-                      });
+            for (AbstractEntity abstractEntity : STORE.values()) {
+                if (abstractEntity instanceof FileRealmEntity realm) {
+                    Path clients = dataDirectory.resolve(realm.getId()).resolve("clients");
+                    if (clients.toFile().exists()) {
+                        try (Stream<Path> clientsStream = Files.walk(clients, 1)) {
+                            clientsStream.filter(EntityIO::canParseFile).forEach(path -> {
+                                FileClientEntity entity = EntityIO.parseFile(path, FileClientEntity.class);
+                                entity.setRealmId(realm.getId());
+                                STORE.put(path, entity);
+                            });
+                        }
+                    }
+
+                    Path scopes = dataDirectory.resolve(realm.getId()).resolve("client-scopes");
+                    if (scopes.toFile().exists()) {
+                        try (Stream<Path> clientScopesStream = Files.walk(scopes, 1)) {
+                            clientScopesStream.filter(EntityIO::canParseFile).forEach(path -> {
+                                FileClientScopeEntity entity = EntityIO.parseFile(path, FileClientScopeEntity.class);
+                                entity.setRealmId(realm.getId());
+                                STORE.put(path, entity);
+                            });
+                        }
+                    }
+                    Path groups = dataDirectory.resolve(realm.getId()).resolve("groups");
+                    if (groups.toFile().exists()) {
+                        try (Stream<Path> groupsStream = Files.walk(groups, 1)) {
+                            groupsStream.filter(EntityIO::canParseFile).forEach(path -> {
+                                FileGroupEntity entity = EntityIO.parseFile(path, FileGroupEntity.class);
+                                entity.setRealmId(realm.getId());
+                                STORE.put(path, entity);
+                            });
+                        }
+                    }
+
+                    Path roles = dataDirectory.resolve(realm.getId()).resolve("roles");
+                    if (roles.toFile().exists()) {
+                        try (Stream<Path> rolesStream =
+                                Files.walk(roles, 10)) { // can be deeply nested because of composite roles
+                            rolesStream.filter(EntityIO::canParseFile).forEach(path -> {
+                                FileRoleEntity entity = EntityIO.parseFile(path, FileRoleEntity.class);
+                                entity.setRealmId(realm.getId());
+                                STORE.put(path, entity);
+                            });
+                        }
+                    }
+                }
             }
-          }
 
-          Path scopes = dataDirectory.resolve(realm.getId()).resolve("client-scopes");
-          if (scopes.toFile().exists()) {
-            try (Stream<Path> clientScopesStream = Files.walk(scopes, 1)) {
-              clientScopesStream
-                  .filter(EntityIO::canParseFile)
-                  .forEach(
-                      path -> {
-                        FileClientScopeEntity entity =
-                            EntityIO.parseFile(path, FileClientScopeEntity.class);
-                        entity.setRealmId(realm.getId());
-                        STORE.put(path, entity);
-                      });
-            }
-          }
-          Path groups = dataDirectory.resolve(realm.getId()).resolve("groups");
-          if (groups.toFile().exists()) {
-            try (Stream<Path> groupsStream = Files.walk(groups, 1)) {
-              groupsStream
-                  .filter(EntityIO::canParseFile)
-                  .forEach(
-                      path -> {
-                        FileGroupEntity entity = EntityIO.parseFile(path, FileGroupEntity.class);
-                        entity.setRealmId(realm.getId());
-                        STORE.put(path, entity);
-                      });
-            }
-          }
-
-          Path roles = dataDirectory.resolve(realm.getId()).resolve("roles");
-          if (roles.toFile().exists()) {
-            try (Stream<Path> rolesStream =
-                Files.walk(roles, 10)) { // can be deeply nested because of composite roles
-              rolesStream
-                  .filter(EntityIO::canParseFile)
-                  .forEach(
-                      path -> {
-                        FileRoleEntity entity = EntityIO.parseFile(path, FileRoleEntity.class);
-                        entity.setRealmId(realm.getId());
-                        STORE.put(path, entity);
-                      });
-            }
-          }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-      }
-
-    } catch (IOException e) {
-      throw new RuntimeException(e);
     }
-  }
 
-  public static void delete(Path path) {
-    LOCK.writeLock().lock();
+    public static void delete(Path path) {
+        LOCK.writeLock().lock();
 
-    try {
-      STORE.remove(path);
-      Files.delete(path);
-      EntityIO.deleteParentDirectoryIfEmpty(path);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      LOCK.writeLock().unlock();
+        try {
+            STORE.remove(path);
+            Files.delete(path);
+            EntityIO.deleteParentDirectoryIfEmpty(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
     }
-  }
 
-  public static <E extends AbstractEntity & UpdatableEntity> void write(Path path, E entity) {
-    LOCK.writeLock().lock();
-    try {
-      EntityIO.writeToFile(entity, path);
-      STORE.put(path, entity);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      LOCK.writeLock().unlock();
+    public static <E extends AbstractEntity & UpdatableEntity> void write(Path path, E entity) {
+        LOCK.writeLock().lock();
+        try {
+            EntityIO.writeToFile(entity, path);
+            STORE.put(path, entity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
     }
-  }
 
-  public static <E extends AbstractEntity & UpdatableEntity> List<E> getAll(
-      Class<E> interfaceOfEntity) {
-    LOCK.readLock().lock();
+    public static <E extends AbstractEntity & UpdatableEntity> List<E> getAll(Class<E> interfaceOfEntity) {
+        LOCK.readLock().lock();
 
-    try {
-      return STORE.values().stream()
-          .filter(v -> interfaceOfEntity.isAssignableFrom(v.getClass()))
-          .map(interfaceOfEntity::cast)
-          .collect(Collectors.toCollection(ArrayList::new));
-    } finally {
-      LOCK.readLock().unlock();
+        try {
+            return STORE.values().stream()
+                    .filter(v -> interfaceOfEntity.isAssignableFrom(v.getClass()))
+                    .map(interfaceOfEntity::cast)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } finally {
+            LOCK.readLock().unlock();
+        }
     }
-  }
 
-  public static <E extends AbstractEntity & UpdatableEntity> E get(Path fileName) {
-    LOCK.readLock().lock();
+    public static <E extends AbstractEntity & UpdatableEntity> E get(Path fileName) {
+        LOCK.readLock().lock();
 
-    try {
-      return (E) STORE.get(fileName);
-    } finally {
-      LOCK.readLock().unlock();
+        try {
+            return (E) STORE.get(fileName);
+        } finally {
+            LOCK.readLock().unlock();
+        }
     }
-  }
 }
