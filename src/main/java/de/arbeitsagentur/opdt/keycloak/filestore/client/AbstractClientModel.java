@@ -30,88 +30,88 @@ import org.keycloak.models.utils.RoleUtils;
  */
 public abstract class AbstractClientModel<E extends AbstractEntity> implements ClientModel {
 
-  protected final KeycloakSession session;
-  protected final RealmModel realm;
-  protected final E entity;
+    protected final KeycloakSession session;
+    protected final RealmModel realm;
+    protected final E entity;
 
-  public AbstractClientModel(KeycloakSession session, RealmModel realm, E entity) {
-    Objects.requireNonNull(entity, "entity");
-    Objects.requireNonNull(realm, "realm");
-    this.session = session;
-    this.realm = realm;
-    this.entity = entity;
-  }
+    public AbstractClientModel(KeycloakSession session, RealmModel realm, E entity) {
+        Objects.requireNonNull(entity, "entity");
+        Objects.requireNonNull(realm, "realm");
+        this.session = session;
+        this.realm = realm;
+        this.entity = entity;
+    }
 
-  @Override
-  public void addClientScopes(Set<ClientScopeModel> clientScopes, boolean defaultScope) {
-    session.clients().addClientScopes(getRealm(), this, clientScopes, defaultScope);
-  }
+    @Override
+    public void addClientScopes(Set<ClientScopeModel> clientScopes, boolean defaultScope) {
+        session.clients().addClientScopes(getRealm(), this, clientScopes, defaultScope);
+    }
 
-  @Override
-  public void addClientScope(ClientScopeModel clientScope, boolean defaultScope) {
-    addClientScopes(Collections.singleton(clientScope), defaultScope);
-  }
+    @Override
+    public void addClientScope(ClientScopeModel clientScope, boolean defaultScope) {
+        addClientScopes(Collections.singleton(clientScope), defaultScope);
+    }
 
-  @Override
-  public void removeClientScope(ClientScopeModel clientScope) {
-    session.clients().removeClientScope(getRealm(), this, clientScope);
-  }
+    @Override
+    public void removeClientScope(ClientScopeModel clientScope) {
+        session.clients().removeClientScope(getRealm(), this, clientScope);
+    }
 
-  @Override
-  public Map<String, ClientScopeModel> getClientScopes(boolean defaultScope) {
-    return session.clients().getClientScopes(getRealm(), this, defaultScope);
-  }
+    @Override
+    public Map<String, ClientScopeModel> getClientScopes(boolean defaultScope) {
+        return session.clients().getClientScopes(getRealm(), this, defaultScope);
+    }
 
-  @Override
-  public Stream<RoleModel> getRealmScopeMappingsStream() {
-    return getScopeMappingsStream().filter(r -> RoleUtils.isRealmRole(r, realm));
-  }
+    @Override
+    public Stream<RoleModel> getRealmScopeMappingsStream() {
+        return getScopeMappingsStream().filter(r -> RoleUtils.isRealmRole(r, realm));
+    }
 
-  @Override
-  public RoleModel getRole(String name) {
-    return session.roles().getClientRole(this, name);
-  }
+    @Override
+    public RoleModel getRole(String name) {
+        return session.roles().getClientRole(this, name);
+    }
 
-  @Override
-  public RoleModel addRole(String name) {
-    return session.roles().addClientRole(this, name);
-  }
+    @Override
+    public RoleModel addRole(String name) {
+        return session.roles().addClientRole(this, name);
+    }
 
-  @Override
-  public RoleModel addRole(String id, String name) {
-    return session.roles().addClientRole(this, id, name);
-  }
+    @Override
+    public RoleModel addRole(String id, String name) {
+        return session.roles().addClientRole(this, id, name);
+    }
 
-  @Override
-  public boolean removeRole(RoleModel role) {
-    return session.roles().removeRole(role);
-  }
+    @Override
+    public boolean removeRole(RoleModel role) {
+        return session.roles().removeRole(role);
+    }
 
-  @Override
-  public Stream<RoleModel> getRolesStream() {
-    return session.roles().getClientRolesStream(this, null, null);
-  }
+    @Override
+    public Stream<RoleModel> getRolesStream() {
+        return session.roles().getClientRolesStream(this, null, null);
+    }
 
-  @Override
-  public Stream<RoleModel> getRolesStream(Integer firstResult, Integer maxResults) {
-    return session.roles().getClientRolesStream(this, firstResult, maxResults);
-  }
+    @Override
+    public Stream<RoleModel> getRolesStream(Integer firstResult, Integer maxResults) {
+        return session.roles().getClientRolesStream(this, firstResult, maxResults);
+    }
 
-  @Override
-  public Stream<RoleModel> searchForRolesStream(String search, Integer first, Integer max) {
-    return session.roles().searchForClientRolesStream(this, search, first, max);
-  }
+    @Override
+    public Stream<RoleModel> searchForRolesStream(String search, Integer first, Integer max) {
+        return session.roles().searchForClientRolesStream(this, search, first, max);
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof ClientModel)) return false;
-    ClientModel that = (ClientModel) o;
-    return Objects.equals(that.getId(), getId());
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClientModel)) return false;
+        ClientModel that = (ClientModel) o;
+        return Objects.equals(that.getId(), getId());
+    }
 
-  @Override
-  public int hashCode() {
-    return getId().hashCode();
-  }
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }

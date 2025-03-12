@@ -18,41 +18,41 @@ package de.arbeitsagentur.opdt.keycloak.filestore.common;
 
 public interface UpdatableEntity {
 
-  public static class Impl implements UpdatableEntity {
-    protected boolean updated;
+    public static class Impl implements UpdatableEntity {
+        protected boolean updated;
 
-    @Override
-    public boolean isUpdated() {
-      return this.updated;
+        @Override
+        public boolean isUpdated() {
+            return this.updated;
+        }
+
+        @Override
+        public void clearUpdatedFlag() {
+            this.updated = false;
+        }
+
+        @Override
+        public void markUpdatedFlag() {
+            this.updated = true;
+        }
     }
 
-    @Override
-    public void clearUpdatedFlag() {
-      this.updated = false;
-    }
+    /**
+     * Flag signalizing that any of the setters has been meaningfully used.
+     *
+     * @return
+     */
+    boolean isUpdated();
 
-    @Override
-    public void markUpdatedFlag() {
-      this.updated = true;
-    }
-  }
+    /**
+     * An optional operation clearing the updated flag. Right after using this method, the {@link
+     * #isUpdated()} would return {@code false}.
+     */
+    default void clearUpdatedFlag() {}
 
-  /**
-   * Flag signalizing that any of the setters has been meaningfully used.
-   *
-   * @return
-   */
-  boolean isUpdated();
-
-  /**
-   * An optional operation clearing the updated flag. Right after using this method, the {@link
-   * #isUpdated()} would return {@code false}.
-   */
-  default void clearUpdatedFlag() {}
-
-  /**
-   * An optional operation setting the updated flag. Right after using this method, the {@link
-   * #isUpdated()} would return {@code true}.
-   */
-  default void markUpdatedFlag() {}
+    /**
+     * An optional operation setting the updated flag. Right after using this method, the {@link
+     * #isUpdated()} would return {@code true}.
+     */
+    default void markUpdatedFlag() {}
 }

@@ -33,31 +33,30 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 
 class EnvVariableResolveTest extends KeycloakModelTest {
 
-  private final Path MASTER_REALM_FILE = Paths.get(TEST_FILESTORE_DIR, "master.yaml");
-  private byte[] MASTER_REALM_FILE_BACKUP;
+    private final Path MASTER_REALM_FILE = Paths.get(TEST_FILESTORE_DIR, "master.yaml");
+    private byte[] MASTER_REALM_FILE_BACKUP;
 
-  @BeforeEach
-  void backupFile() throws IOException {
-    MASTER_REALM_FILE_BACKUP = Files.readAllBytes(MASTER_REALM_FILE);
-  }
+    @BeforeEach
+    void backupFile() throws IOException {
+        MASTER_REALM_FILE_BACKUP = Files.readAllBytes(MASTER_REALM_FILE);
+    }
 
-  @AfterEach
-  void restoreFile() throws IOException {
-    Files.write(MASTER_REALM_FILE, MASTER_REALM_FILE_BACKUP);
-  }
+    @AfterEach
+    void restoreFile() throws IOException {
+        Files.write(MASTER_REALM_FILE, MASTER_REALM_FILE_BACKUP);
+    }
 
-  // Single test since var subst is done during static initializer and would be hard to handle in
-  // multiple tests
-  @Test
-  void givenEnvVariable_thenVariableResolutionIsCorrect() throws Exception {
-    Consumer<KeycloakSession> assertThatVariableIsResolved =
-        session -> {
-          RealmModel realm = session.realms().getRealm("master");
-          assertThat(realm.getAccountTheme()).isEqualTo("i am resolved!");
-          assertThat(realm.getAdminTheme()).isEqualTo("${SHOULD_NOT_BE_RESOLVED}");
-          assertThat(realm.getEmailTheme()).isEqualTo("defaultValue");
+    // Single test since var subst is done during static initializer and would be hard to handle in
+    // multiple tests
+    @Test
+    void givenEnvVariable_thenVariableResolutionIsCorrect() throws Exception {
+        Consumer<KeycloakSession> assertThatVariableIsResolved = session -> {
+            RealmModel realm = session.realms().getRealm("master");
+            assertThat(realm.getAccountTheme()).isEqualTo("i am resolved!");
+            assertThat(realm.getAdminTheme()).isEqualTo("${SHOULD_NOT_BE_RESOLVED}");
+            assertThat(realm.getEmailTheme()).isEqualTo("defaultValue");
         };
-    EnvironmentVariables env = new EnvironmentVariables("SHOULD_BE_RESOLVED", "i am resolved!");
-    env.execute(() -> inCommittedTransaction(assertThatVariableIsResolved));
-  }
+        EnvironmentVariables env = new EnvironmentVariables("SHOULD_BE_RESOLVED", "i am resolved!");
+        env.execute(() -> inCommittedTransaction(assertThatVariableIsResolved));
+    }
 }

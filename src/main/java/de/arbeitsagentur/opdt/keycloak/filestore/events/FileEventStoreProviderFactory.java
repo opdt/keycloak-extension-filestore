@@ -30,63 +30,60 @@ import org.keycloak.provider.InvalidationHandler;
 
 @AutoService(EventStoreProviderFactory.class)
 public class FileEventStoreProviderFactory
-    implements AmphibianProviderFactory<EventStoreProvider>,
-        EventStoreProviderFactory,
-        InvalidationHandler {
+        implements AmphibianProviderFactory<EventStoreProvider>, EventStoreProviderFactory, InvalidationHandler {
 
-  public static final String PROVIDER_ID = AbstractFileProviderFactory.PROVIDER_ID;
+    public static final String PROVIDER_ID = AbstractFileProviderFactory.PROVIDER_ID;
 
-  protected final String uniqueKey =
-      getClass().getName() + AbstractFileProviderFactory.uniqueCounter.incrementAndGet();
+    protected final String uniqueKey =
+            getClass().getName() + AbstractFileProviderFactory.uniqueCounter.incrementAndGet();
 
-  @Override
-  public void init(Config.Scope config) {}
+    @Override
+    public void init(Config.Scope config) {}
 
-  @Override
-  public void postInit(KeycloakSessionFactory factory) {}
+    @Override
+    public void postInit(KeycloakSessionFactory factory) {}
 
-  @Override
-  public EventStoreProvider create(KeycloakSession session) {
-    var provider = new FileEventStoreProvider(session);
-    session.setAttribute(uniqueKey, provider);
-    return provider;
-  }
-
-  @Override
-  public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
-    if (type == AbstractFileProviderFactory.MapProviderObjectType.REALM_BEFORE_REMOVE) {
-      getInstance(session).clear((RealmModel) params[0]);
-      getInstance(session).clearAdmin((RealmModel) params[0]);
+    @Override
+    public EventStoreProvider create(KeycloakSession session) {
+        var provider = new FileEventStoreProvider(session);
+        session.setAttribute(uniqueKey, provider);
+        return provider;
     }
-  }
 
-  protected EventStoreProvider getInstance(KeycloakSession session) {
-    FileEventStoreProvider existingProvider =
-        session.getAttribute(uniqueKey, FileEventStoreProvider.class);
-    if (existingProvider != null) {
-      return existingProvider;
-    } else {
-      return create(session);
+    @Override
+    public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
+        if (type == AbstractFileProviderFactory.MapProviderObjectType.REALM_BEFORE_REMOVE) {
+            getInstance(session).clear((RealmModel) params[0]);
+            getInstance(session).clearAdmin((RealmModel) params[0]);
+        }
     }
-  }
 
-  @Override
-  public void close() {
-    AmphibianProviderFactory.super.close();
-  }
+    protected EventStoreProvider getInstance(KeycloakSession session) {
+        FileEventStoreProvider existingProvider = session.getAttribute(uniqueKey, FileEventStoreProvider.class);
+        if (existingProvider != null) {
+            return existingProvider;
+        } else {
+            return create(session);
+        }
+    }
 
-  @Override
-  public String getId() {
-    return PROVIDER_ID;
-  }
+    @Override
+    public void close() {
+        AmphibianProviderFactory.super.close();
+    }
 
-  @Override
-  public String getHelpText() {
-    return "Event provider";
-  }
+    @Override
+    public String getId() {
+        return PROVIDER_ID;
+    }
 
-  @Override
-  public int order() {
-    return Integer.MAX_VALUE; // Ensure this provider is used
-  }
+    @Override
+    public String getHelpText() {
+        return "Event provider";
+    }
+
+    @Override
+    public int order() {
+        return Integer.MAX_VALUE; // Ensure this provider is used
+    }
 }

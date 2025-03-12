@@ -24,47 +24,43 @@ import org.keycloak.models.*;
 import org.keycloak.provider.InvalidationHandler;
 
 @AutoService(RoleProviderFactory.class)
-public class FileRoleProviderFactory
-    extends AbstractFileProviderFactory<FileRoleProvider, FileRoleEntity, RoleModel>
-    implements RoleProviderFactory<FileRoleProvider>, InvalidationHandler {
+public class FileRoleProviderFactory extends AbstractFileProviderFactory<FileRoleProvider, FileRoleEntity, RoleModel>
+        implements RoleProviderFactory<FileRoleProvider>, InvalidationHandler {
 
-  public FileRoleProviderFactory() {
-    super(RoleModel.class, FileRoleProvider.class);
-  }
+    public FileRoleProviderFactory() {
+        super(RoleModel.class, FileRoleProvider.class);
+    }
 
-  @Override
-  public FileRoleProvider createNew(KeycloakSession session) {
-    return new FileRoleProvider(session);
-  }
+    @Override
+    public FileRoleProvider createNew(KeycloakSession session) {
+        return new FileRoleProvider(session);
+    }
 
-  @Override
-  public String getHelpText() {
-    return "Role provider";
-  }
+    @Override
+    public String getHelpText() {
+        return "Role provider";
+    }
 
-  @Override
-  public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
-    if (type == REALM_BEFORE_REMOVE) {
-      create(session).preRemove((RealmModel) params[0]);
-    } else if (type == CLIENT_BEFORE_REMOVE) {
-      create(session).removeRoles((ClientModel) params[1]);
-    } else if (type == ROLE_BEFORE_REMOVE) {
-      create(session).preRemove((RealmModel) params[0], (RoleModel) params[1]);
-    } else if (type == ROLE_AFTER_REMOVE) {
-      session
-          .getKeycloakSessionFactory()
-          .publish(
-              new RoleContainerModel.RoleRemovedEvent() {
+    @Override
+    public void invalidate(KeycloakSession session, InvalidableObjectType type, Object... params) {
+        if (type == REALM_BEFORE_REMOVE) {
+            create(session).preRemove((RealmModel) params[0]);
+        } else if (type == CLIENT_BEFORE_REMOVE) {
+            create(session).removeRoles((ClientModel) params[1]);
+        } else if (type == ROLE_BEFORE_REMOVE) {
+            create(session).preRemove((RealmModel) params[0], (RoleModel) params[1]);
+        } else if (type == ROLE_AFTER_REMOVE) {
+            session.getKeycloakSessionFactory().publish(new RoleContainerModel.RoleRemovedEvent() {
                 @Override
                 public RoleModel getRole() {
-                  return (RoleModel) params[1];
+                    return (RoleModel) params[1];
                 }
 
                 @Override
                 public KeycloakSession getKeycloakSession() {
-                  return session;
+                    return session;
                 }
-              });
+            });
+        }
     }
-  }
 }

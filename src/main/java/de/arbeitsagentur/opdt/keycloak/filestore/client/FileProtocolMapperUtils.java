@@ -26,36 +26,35 @@ import org.keycloak.models.ProtocolMapperModel;
 
 public class FileProtocolMapperUtils {
 
-  private final String protocol;
-  private static final ConcurrentMap<String, FileProtocolMapperUtils> INSTANCES =
-      new ConcurrentHashMap<>();
+    private final String protocol;
+    private static final ConcurrentMap<String, FileProtocolMapperUtils> INSTANCES = new ConcurrentHashMap<>();
 
-  private FileProtocolMapperUtils(String protocol) {
-    this.protocol = protocol;
-  }
+    private FileProtocolMapperUtils(String protocol) {
+        this.protocol = protocol;
+    }
 
-  public static FileProtocolMapperUtils instanceFor(String protocol) {
-    Objects.requireNonNull(protocol);
-    return INSTANCES.computeIfAbsent(protocol, FileProtocolMapperUtils::new);
-  }
+    public static FileProtocolMapperUtils instanceFor(String protocol) {
+        Objects.requireNonNull(protocol);
+        return INSTANCES.computeIfAbsent(protocol, FileProtocolMapperUtils::new);
+    }
 
-  public static FileProtocolMapperEntity fromModel(ProtocolMapperModel model) {
-    FileProtocolMapperEntity res = new FileProtocolMapperEntity();
-    res.setId(model.getId());
-    res.setName(model.getName());
-    res.setProtocolMapper(model.getProtocolMapper());
-    res.setConfig(model.getConfig());
-    return res;
-  }
+    public static FileProtocolMapperEntity fromModel(ProtocolMapperModel model) {
+        FileProtocolMapperEntity res = new FileProtocolMapperEntity();
+        res.setId(model.getId());
+        res.setName(model.getName());
+        res.setProtocolMapper(model.getProtocolMapper());
+        res.setConfig(model.getConfig());
+        return res;
+    }
 
-  public ProtocolMapperModel toModel(FileProtocolMapperEntity entity) {
-    ProtocolMapperModel res = new ProtocolMapperModel();
-    res.setId(entity.getId());
-    res.setName(entity.getName());
-    res.setProtocolMapper(entity.getProtocolMapper());
-    Map<String, String> config = entity.getConfig();
-    res.setConfig(config == null ? new HashMap<>() : new HashMap<>(config));
-    res.setProtocol(protocol);
-    return res;
-  }
+    public ProtocolMapperModel toModel(FileProtocolMapperEntity entity) {
+        ProtocolMapperModel res = new ProtocolMapperModel();
+        res.setId(entity.getId());
+        res.setName(entity.getName());
+        res.setProtocolMapper(entity.getProtocolMapper());
+        Map<String, String> config = entity.getConfig();
+        res.setConfig(config == null ? new HashMap<>() : new HashMap<>(config));
+        res.setProtocol(protocol);
+        return res;
+    }
 }

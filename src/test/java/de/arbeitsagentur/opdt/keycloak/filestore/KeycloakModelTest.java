@@ -79,286 +79,269 @@ import org.keycloak.timer.TimerSpi;
  */
 public abstract class KeycloakModelTest {
 
-  public static final String TEST_FILESTORE_DIR = "src/test/filestore";
-  private static final Logger LOG = Logger.getLogger(KeycloakModelParameters.class);
-  private static final AtomicInteger FACTORY_COUNT = new AtomicInteger();
-  private static final List<String> MAIN_THREAD_NAMES = Arrays.asList("main", "Time-limited test");
+    public static final String TEST_FILESTORE_DIR = "src/test/filestore";
+    private static final Logger LOG = Logger.getLogger(KeycloakModelParameters.class);
+    private static final AtomicInteger FACTORY_COUNT = new AtomicInteger();
+    private static final List<String> MAIN_THREAD_NAMES = Arrays.asList("main", "Time-limited test");
 
-  private static final Set<Class<? extends Spi>> ALLOWED_SPIS =
-      ImmutableSet.<Class<? extends Spi>>builder()
-          .add(AuthorizationSpi.class)
-          .add(PolicySpi.class)
-          .add(ClientScopeSpi.class)
-          .add(ClientSpi.class)
-          .add(ComponentFactorySpi.class)
-          .add(EventStoreSpi.class)
-          .add(ExecutorsSpi.class)
-          .add(GroupSpi.class)
-          .add(RealmSpi.class)
-          .add(RoleSpi.class)
-          .add(DeploymentStateSpi.class)
-          .add(StoreFactorySpi.class)
-          .add(TimerSpi.class)
-          .add(UserLoginFailureSpi.class)
-          .add(UserSessionSpi.class)
-          .add(UserSpi.class)
-          .add(DatastoreSpi.class)
-          .build();
+    private static final Set<Class<? extends Spi>> ALLOWED_SPIS = ImmutableSet.<Class<? extends Spi>>builder()
+            .add(AuthorizationSpi.class)
+            .add(PolicySpi.class)
+            .add(ClientScopeSpi.class)
+            .add(ClientSpi.class)
+            .add(ComponentFactorySpi.class)
+            .add(EventStoreSpi.class)
+            .add(ExecutorsSpi.class)
+            .add(GroupSpi.class)
+            .add(RealmSpi.class)
+            .add(RoleSpi.class)
+            .add(DeploymentStateSpi.class)
+            .add(StoreFactorySpi.class)
+            .add(TimerSpi.class)
+            .add(UserLoginFailureSpi.class)
+            .add(UserSessionSpi.class)
+            .add(UserSpi.class)
+            .add(DatastoreSpi.class)
+            .build();
 
-  private static final Set<Class<? extends ProviderFactory>> ALLOWED_FACTORIES =
-      ImmutableSet.<Class<? extends ProviderFactory>>builder()
-          .add(ComponentFactoryProviderFactory.class)
-          .add(DefaultAuthorizationProviderFactory.class)
-          .add(PolicyProviderFactory.class)
-          .add(DefaultExecutorsProviderFactory.class)
-          .add(DeploymentStateProviderFactory.class)
-          .add(DatastoreProviderFactory.class)
-          .build();
+    private static final Set<Class<? extends ProviderFactory>> ALLOWED_FACTORIES =
+            ImmutableSet.<Class<? extends ProviderFactory>>builder()
+                    .add(ComponentFactoryProviderFactory.class)
+                    .add(DefaultAuthorizationProviderFactory.class)
+                    .add(PolicyProviderFactory.class)
+                    .add(DefaultExecutorsProviderFactory.class)
+                    .add(DeploymentStateProviderFactory.class)
+                    .add(DatastoreProviderFactory.class)
+                    .build();
 
-  protected static final List<KeycloakModelParameters> MODEL_PARAMETERS;
-  protected static final Config CONFIG = new Config(KeycloakModelTest::useDefaultFactory);
-  private static volatile KeycloakSessionFactory DEFAULT_FACTORY;
-  private static final ThreadLocal<KeycloakSessionFactory> LOCAL_FACTORY = new ThreadLocal<>();
-  protected static boolean USE_DEFAULT_FACTORY = false;
+    protected static final List<KeycloakModelParameters> MODEL_PARAMETERS;
+    protected static final Config CONFIG = new Config(KeycloakModelTest::useDefaultFactory);
+    private static volatile KeycloakSessionFactory DEFAULT_FACTORY;
+    private static final ThreadLocal<KeycloakSessionFactory> LOCAL_FACTORY = new ThreadLocal<>();
+    protected static boolean USE_DEFAULT_FACTORY = false;
 
-  static {
-    org.keycloak.Config.init(CONFIG);
-    KeycloakModelParameters basicParameters =
-        new KeycloakModelParameters(ALLOWED_SPIS, ALLOWED_FACTORIES);
-    MODEL_PARAMETERS =
-        Stream.concat(
-                Stream.of(basicParameters),
-                Stream.of(System.getProperty("keycloak.model.parameters", "").split("\\s*,\\s*"))
-                    .filter(s -> s != null && !s.trim().isEmpty())
-                    .map(
-                        cn -> {
-                          try {
-                            return Class.forName(
-                                cn.indexOf('.') >= 0
-                                    ? cn
-                                    : ("de.arbeitsagentur.opdt.keycloak.filestore.testsetup."
-                                        + cn));
-                          } catch (Exception e) {
-                            LOG.error("Cannot find " + cn);
-                            return null;
-                          }
-                        })
-                    .filter(Objects::nonNull)
-                    .map(
-                        c -> {
-                          try {
-                            return c.getDeclaredConstructor().newInstance();
-                          } catch (Exception e) {
-                            LOG.error("Cannot instantiate " + c);
-                            return null;
-                          }
-                        })
-                    .filter(KeycloakModelParameters.class::isInstance)
-                    .map(KeycloakModelParameters.class::cast))
-            .toList();
-    for (KeycloakModelParameters kmp : KeycloakModelTest.MODEL_PARAMETERS) {
-      kmp.beforeSuite(CONFIG);
+    static {
+        org.keycloak.Config.init(CONFIG);
+        KeycloakModelParameters basicParameters = new KeycloakModelParameters(ALLOWED_SPIS, ALLOWED_FACTORIES);
+        MODEL_PARAMETERS = Stream.concat(
+                        Stream.of(basicParameters),
+                        Stream.of(System.getProperty("keycloak.model.parameters", "")
+                                        .split("\\s*,\\s*"))
+                                .filter(s -> s != null && !s.trim().isEmpty())
+                                .map(cn -> {
+                                    try {
+                                        return Class.forName(
+                                                cn.indexOf('.') >= 0
+                                                        ? cn
+                                                        : ("de.arbeitsagentur.opdt.keycloak.filestore.testsetup."
+                                                                + cn));
+                                    } catch (Exception e) {
+                                        LOG.error("Cannot find " + cn);
+                                        return null;
+                                    }
+                                })
+                                .filter(Objects::nonNull)
+                                .map(c -> {
+                                    try {
+                                        return c.getDeclaredConstructor().newInstance();
+                                    } catch (Exception e) {
+                                        LOG.error("Cannot instantiate " + c);
+                                        return null;
+                                    }
+                                })
+                                .filter(KeycloakModelParameters.class::isInstance)
+                                .map(KeycloakModelParameters.class::cast))
+                .toList();
+        for (KeycloakModelParameters kmp : KeycloakModelTest.MODEL_PARAMETERS) {
+            kmp.beforeSuite(CONFIG);
+        }
+        reinitializeKeycloakSessionFactory();
+        DEFAULT_FACTORY = getFactory();
     }
-    reinitializeKeycloakSessionFactory();
-    DEFAULT_FACTORY = getFactory();
-  }
 
-  /**
-   * Creates a fresh initialized {@link KeycloakSessionFactory}. The returned factory uses
-   * configuration local to the thread that calls this method, allowing for per-thread
-   * customization. This in turn allows testing of several parallel session factories which can be
-   * used to simulate several servers running in parallel.
-   */
-  public static KeycloakSessionFactory createKeycloakSessionFactory() {
-    int factoryIndex = FACTORY_COUNT.incrementAndGet();
-    String threadName = Thread.currentThread().getName();
-    CONFIG.reset();
-    CONFIG
-        .spi(ComponentFactorySpi.NAME)
-        .provider(DefaultComponentFactoryProviderFactory.PROVIDER_ID)
-        .config("cachingForced", "true");
-    CONFIG.spi("mapStorage").provider("file").config("dir", TEST_FILESTORE_DIR);
-    MODEL_PARAMETERS.forEach(m -> m.updateConfig(CONFIG));
-    LOG.debugf(
-        "Creating factory %d in %s using the following configuration:\n    %s",
-        factoryIndex, threadName, CONFIG);
-    DefaultKeycloakSessionFactory res =
-        new DefaultKeycloakSessionFactory() {
-          @Override
-          public KeycloakSession create() {
-            return new DefaultKeycloakSession(this) {
-              @Override
-              protected DefaultKeycloakContext createKeycloakContext(
-                  KeycloakSession keycloakSession) {
-                return new QuarkusKeycloakContext(this);
-              }
-            };
-          }
+    /**
+     * Creates a fresh initialized {@link KeycloakSessionFactory}. The returned factory uses
+     * configuration local to the thread that calls this method, allowing for per-thread
+     * customization. This in turn allows testing of several parallel session factories which can be
+     * used to simulate several servers running in parallel.
+     */
+    public static KeycloakSessionFactory createKeycloakSessionFactory() {
+        int factoryIndex = FACTORY_COUNT.incrementAndGet();
+        String threadName = Thread.currentThread().getName();
+        CONFIG.reset();
+        CONFIG.spi(ComponentFactorySpi.NAME)
+                .provider(DefaultComponentFactoryProviderFactory.PROVIDER_ID)
+                .config("cachingForced", "true");
+        CONFIG.spi("mapStorage").provider("file").config("dir", TEST_FILESTORE_DIR);
+        MODEL_PARAMETERS.forEach(m -> m.updateConfig(CONFIG));
+        LOG.debugf(
+                "Creating factory %d in %s using the following configuration:\n    %s",
+                factoryIndex, threadName, CONFIG);
+        DefaultKeycloakSessionFactory res = new DefaultKeycloakSessionFactory() {
+            @Override
+            public KeycloakSession create() {
+                return new DefaultKeycloakSession(this) {
+                    @Override
+                    protected DefaultKeycloakContext createKeycloakContext(KeycloakSession keycloakSession) {
+                        return new QuarkusKeycloakContext(this);
+                    }
+                };
+            }
 
-          @Override
-          public void init() {
-            Profile.configure(new PropertiesProfileConfigResolver(System.getProperties()));
-            super.init();
-          }
+            @Override
+            public void init() {
+                Profile.configure(new PropertiesProfileConfigResolver(System.getProperties()));
+                super.init();
+            }
 
-          @Override
-          protected boolean isEnabled(ProviderFactory factory, Scope scope) {
-            return super.isEnabled(factory, scope) && isFactoryAllowed(factory);
-          }
+            @Override
+            protected boolean isEnabled(ProviderFactory factory, Scope scope) {
+                return super.isEnabled(factory, scope) && isFactoryAllowed(factory);
+            }
 
-          @Override
-          protected Map<Class<? extends Provider>, Map<String, ProviderFactory>> loadFactories(
-              ProviderManager pm) {
-            spis.removeIf(s -> !isSpiAllowed(s));
-            return super.loadFactories(pm);
-          }
+            @Override
+            protected Map<Class<? extends Provider>, Map<String, ProviderFactory>> loadFactories(ProviderManager pm) {
+                spis.removeIf(s -> !isSpiAllowed(s));
+                return super.loadFactories(pm);
+            }
 
-          private boolean isSpiAllowed(Spi s) {
-            return MODEL_PARAMETERS.stream().anyMatch(p -> p.isSpiAllowed(s));
-          }
+            private boolean isSpiAllowed(Spi s) {
+                return MODEL_PARAMETERS.stream().anyMatch(p -> p.isSpiAllowed(s));
+            }
 
-          private boolean isFactoryAllowed(ProviderFactory factory) {
-            return MODEL_PARAMETERS.stream().anyMatch(p -> p.isFactoryAllowed(factory));
-          }
+            private boolean isFactoryAllowed(ProviderFactory factory) {
+                return MODEL_PARAMETERS.stream().anyMatch(p -> p.isFactoryAllowed(factory));
+            }
 
-          @Override
-          public String toString() {
-            return "KeycloakSessionFactory " + factoryIndex + " (from " + threadName + " thread)";
-          }
+            @Override
+            public String toString() {
+                return "KeycloakSessionFactory " + factoryIndex + " (from " + threadName + " thread)";
+            }
         };
-    res.init();
-    res.publish(new PostMigrationEvent(res));
-    return res;
-  }
-
-  /**
-   * Closes and initializes new {@link #LOCAL_FACTORY}. This has the same effect as server restart
-   * in full-blown server scenario.
-   */
-  public static synchronized void reinitializeKeycloakSessionFactory() {
-    closeKeycloakSessionFactory();
-    setFactory(createKeycloakSessionFactory());
-  }
-
-  public static synchronized void closeKeycloakSessionFactory() {
-    KeycloakSessionFactory f = getFactory();
-    setFactory(null);
-    if (f != null) {
-      LOG.debugf("Closing %s", f);
-      f.close();
+        res.init();
+        res.publish(new PostMigrationEvent(res));
+        return res;
     }
-  }
 
-  protected static boolean useDefaultFactory() {
-    return USE_DEFAULT_FACTORY || MAIN_THREAD_NAMES.contains(Thread.currentThread().getName());
-  }
-
-  protected static KeycloakSessionFactory getFactory() {
-    return useDefaultFactory() ? DEFAULT_FACTORY : LOCAL_FACTORY.get();
-  }
-
-  private static void setFactory(KeycloakSessionFactory factory) {
-    if (useDefaultFactory()) {
-      DEFAULT_FACTORY = factory;
-    } else {
-      LOCAL_FACTORY.set(factory);
+    /**
+     * Closes and initializes new {@link #LOCAL_FACTORY}. This has the same effect as server restart
+     * in full-blown server scenario.
+     */
+    public static synchronized void reinitializeKeycloakSessionFactory() {
+        closeKeycloakSessionFactory();
+        setFactory(createKeycloakSessionFactory());
     }
-  }
 
-  @BeforeAll
-  public static void checkValidParameters() {
-    Assumptions.assumeTrue(
-        MODEL_PARAMETERS.size() > 0, // Additional parameters have to be set
-        "keycloak.model.parameters property must be set");
-  }
-
-  protected void createEnvironment(KeycloakSession s) {}
-
-  protected void cleanEnvironment(KeycloakSession s) {}
-
-  @BeforeEach
-  public final void createEnvironment() {
-    Time.setOffset(0);
-    KeycloakModelUtils.runJobInTransaction(getFactory(), this::createEnvironment);
-  }
-
-  @AfterEach
-  public final void cleanEnvironment() {
-    if (getFactory() == null) {
-      reinitializeKeycloakSessionFactory();
+    public static synchronized void closeKeycloakSessionFactory() {
+        KeycloakSessionFactory f = getFactory();
+        setFactory(null);
+        if (f != null) {
+            LOG.debugf("Closing %s", f);
+            f.close();
+        }
     }
-    Time.setOffset(0);
-    KeycloakModelUtils.runJobInTransaction(getFactory(), this::cleanEnvironment);
-  }
 
-  protected void inCommittedTransaction(Consumer<KeycloakSession> what) {
-    inCommittedTransaction(
-        a -> {
-          what.accept(a);
-          return null;
+    protected static boolean useDefaultFactory() {
+        return USE_DEFAULT_FACTORY
+                || MAIN_THREAD_NAMES.contains(Thread.currentThread().getName());
+    }
+
+    protected static KeycloakSessionFactory getFactory() {
+        return useDefaultFactory() ? DEFAULT_FACTORY : LOCAL_FACTORY.get();
+    }
+
+    private static void setFactory(KeycloakSessionFactory factory) {
+        if (useDefaultFactory()) {
+            DEFAULT_FACTORY = factory;
+        } else {
+            LOCAL_FACTORY.set(factory);
+        }
+    }
+
+    @BeforeAll
+    public static void checkValidParameters() {
+        Assumptions.assumeTrue(
+                MODEL_PARAMETERS.size() > 0, // Additional parameters have to be set
+                "keycloak.model.parameters property must be set");
+    }
+
+    protected void createEnvironment(KeycloakSession s) {}
+
+    protected void cleanEnvironment(KeycloakSession s) {}
+
+    @BeforeEach
+    public final void createEnvironment() {
+        Time.setOffset(0);
+        KeycloakModelUtils.runJobInTransaction(getFactory(), this::createEnvironment);
+    }
+
+    @AfterEach
+    public final void cleanEnvironment() {
+        if (getFactory() == null) {
+            reinitializeKeycloakSessionFactory();
+        }
+        Time.setOffset(0);
+        KeycloakModelUtils.runJobInTransaction(getFactory(), this::cleanEnvironment);
+    }
+
+    protected void inCommittedTransaction(Consumer<KeycloakSession> what) {
+        inCommittedTransaction(a -> {
+            what.accept(a);
+            return null;
         });
-  }
+    }
 
-  protected <R> R inCommittedTransaction(Function<KeycloakSession, R> what) {
-    return inCommittedTransaction(1, (a, b) -> what.apply(a), null);
-  }
+    protected <R> R inCommittedTransaction(Function<KeycloakSession, R> what) {
+        return inCommittedTransaction(1, (a, b) -> what.apply(a), null);
+    }
 
-  protected <T, R> R inCommittedTransaction(
-      T parameter,
-      BiFunction<KeycloakSession, T, R> what,
-      BiConsumer<KeycloakSession, T> onCommit) {
-    AtomicReference<R> res = new AtomicReference<>();
-    KeycloakModelUtils.runJobInTransaction(
-        getFactory(),
-        session -> {
-          session
-              .getTransactionManager()
-              .enlistAfterCompletion(
-                  new AbstractKeycloakTransaction() {
-                    @Override
-                    protected void commitImpl() {
-                      if (onCommit != null) {
+    protected <T, R> R inCommittedTransaction(
+            T parameter, BiFunction<KeycloakSession, T, R> what, BiConsumer<KeycloakSession, T> onCommit) {
+        AtomicReference<R> res = new AtomicReference<>();
+        KeycloakModelUtils.runJobInTransaction(getFactory(), session -> {
+            session.getTransactionManager().enlistAfterCompletion(new AbstractKeycloakTransaction() {
+                @Override
+                protected void commitImpl() {
+                    if (onCommit != null) {
                         onCommit.accept(session, parameter);
-                      }
                     }
+                }
 
-                    @Override
-                    protected void rollbackImpl() {
-                      // Unsupported in Cassandra
-                    }
-                  });
-          res.set(what.apply(session, parameter));
+                @Override
+                protected void rollbackImpl() {
+                    // Unsupported in Cassandra
+                }
+            });
+            res.set(what.apply(session, parameter));
         });
-    return res.get();
-  }
+        return res.get();
+    }
 
-  /**
-   * Convenience method for {@link #inCommittedTransaction(java.util.function.Consumer)} that
-   * obtains realm model from the session and puts it into session context before running the {@code
-   * fn} task.
-   */
-  protected void withRealm(String realmId, BiConsumer<KeycloakSession, RealmModel> fn) {
-    inCommittedTransaction(
-        session -> {
-          final RealmModel realm = session.realms().getRealm(realmId);
-          session.getContext().setRealm(realm);
-          fn.accept(session, realm);
+    /**
+     * Convenience method for {@link #inCommittedTransaction(java.util.function.Consumer)} that
+     * obtains realm model from the session and puts it into session context before running the {@code
+     * fn} task.
+     */
+    protected void withRealm(String realmId, BiConsumer<KeycloakSession, RealmModel> fn) {
+        inCommittedTransaction(session -> {
+            final RealmModel realm = session.realms().getRealm(realmId);
+            session.getContext().setRealm(realm);
+            fn.accept(session, realm);
         });
-  }
+    }
 
-  /**
-   * Convenience method for {@link #inCommittedTransaction(java.util.function.Consumer)} that
-   * obtains realm model from the session and puts it into session context before running the {@code
-   * fn} task.
-   */
-  protected <T extends Provider> void withRealmAndProvider(
-      String realmId, Function<KeycloakSession, T> providerFn, BiConsumer<T, RealmModel> fn) {
-    inCommittedTransaction(
-        session -> {
-          final RealmModel realm = session.realms().getRealm(realmId);
-          session.getContext().setRealm(realm);
-          T provider = providerFn.apply(session);
-          fn.accept(provider, realm);
+    /**
+     * Convenience method for {@link #inCommittedTransaction(java.util.function.Consumer)} that
+     * obtains realm model from the session and puts it into session context before running the {@code
+     * fn} task.
+     */
+    protected <T extends Provider> void withRealmAndProvider(
+            String realmId, Function<KeycloakSession, T> providerFn, BiConsumer<T, RealmModel> fn) {
+        inCommittedTransaction(session -> {
+            final RealmModel realm = session.realms().getRealm(realmId);
+            session.getContext().setRealm(realm);
+            T provider = providerFn.apply(session);
+            fn.accept(provider, realm);
         });
-  }
+    }
 }

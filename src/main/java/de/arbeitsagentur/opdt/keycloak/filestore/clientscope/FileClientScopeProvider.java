@@ -32,108 +32,104 @@ import org.keycloak.models.utils.KeycloakModelUtils;
 
 public class FileClientScopeProvider implements ClientScopeProvider {
 
-  private static final Logger LOG = Logger.getLogger(FileClientScopeProvider.class);
-  private final KeycloakSession session;
+    private static final Logger LOG = Logger.getLogger(FileClientScopeProvider.class);
+    private final KeycloakSession session;
 
-  public FileClientScopeProvider(KeycloakSession session) {
-    this.session = session;
-  }
-
-  private Function<FileClientScopeEntity, ClientScopeModel> entityToAdapterFunc(RealmModel realm) {
-    return origEntity -> new FileClientScopeAdapter(session, realm, origEntity);
-  }
-
-  private boolean isEntityPartOfRealm(RealmModel realm, FileClientScopeEntity entity) {
-    return Objects.equals(realm.getId(), entity.getRealmId());
-  }
-
-  @Override
-  public Stream<ClientScopeModel> getClientScopesStream(RealmModel realm) {
-    return FileClientScopeStore.readAll().stream()
-        .filter(clientScope -> realm.getId().equals(clientScope.getRealmId()))
-        .map(entityToAdapterFunc(realm))
-        .sorted(Comparator.comparing(ClientScopeModel::getName));
-  }
-
-  @Override
-  public ClientScopeModel addClientScope(RealmModel realm, String id, String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("name cannot be null");
+    public FileClientScopeProvider(KeycloakSession session) {
+        this.session = session;
     }
 
-    if (FileClientScopeStore.exists(id, realm.getId())) {
-      throw new ModelDuplicateException("Client scope exists: " + id);
+    private Function<FileClientScopeEntity, ClientScopeModel> entityToAdapterFunc(RealmModel realm) {
+        return origEntity -> new FileClientScopeAdapter(session, realm, origEntity);
     }
 
-    boolean doesNameAlreadyExists =
-        FileClientScopeStore.readAll().stream()
-            .filter(clientScope -> realm.getId().equals(clientScope.getRealmId()))
-            .filter(clientScope -> name.equals(clientScope.getName()))
-            .map(entityToAdapterFunc(realm))
-            .findAny()
-            .isPresent();
-
-    if (doesNameAlreadyExists) {
-      throw new ModelDuplicateException(
-          "Client scope with name '" + name + "' in realm " + realm.getName());
+    private boolean isEntityPartOfRealm(RealmModel realm, FileClientScopeEntity entity) {
+        return Objects.equals(realm.getId(), entity.getRealmId());
     }
 
-    LOG.tracef("addClientScope(%s, %s, %s)%s", realm, id, name, getShortStackTrace());
-    FileClientScopeEntity entity = new FileClientScopeEntity();
-    String newId = id != null ? id : name;
-    entity.setId(newId);
-    entity.setRealmId(realm.getId());
-    entity.setName(KeycloakModelUtils.convertClientScopeName(name));
-
-    FileClientScopeStore.update(entity);
-    return entityToAdapterFunc(realm).apply(entity);
-  }
-
-  @Override
-  public boolean removeClientScope(RealmModel realm, String id) {
-    if (id == null) return false;
-
-    ClientScopeModel clientScope = getClientScopeById(realm, id);
-    if (clientScope == null) return false;
-
-    session.invalidate(CLIENT_SCOPE_BEFORE_REMOVE, realm, clientScope);
-    FileClientScopeStore.deleteById(id, realm.getId());
-    session.invalidate(CLIENT_SCOPE_AFTER_REMOVE, clientScope);
-    return true;
-  }
-
-  @Override
-  public void removeClientScopes(RealmModel realm) {
-    LOG.tracef("removeClients(%s)%s", realm, getShortStackTrace());
-    getClientScopesStream(realm)
-        .map(ClientScopeModel::getId)
-        .collect(
-            Collectors
-                .toSet()) // This is necessary to read out all the client IDs before removing the
-        // clients
-        .forEach(id -> removeClientScope(realm, id));
-  }
-
-  @Override
-  public ClientScopeModel getClientScopeById(RealmModel realm, String id) {
-    if (id == null || id.isBlank()) {
-      return null;
+    @Override
+    public Stream<ClientScopeModel> getClientScopesStream(RealmModel realm) {
+        return FileClientScopeStore.readAll().stream()
+                .filter(clientScope -> realm.getId().equals(clientScope.getRealmId()))
+                .map(entityToAdapterFunc(realm))
+                .sorted(Comparator.comparing(ClientScopeModel::getName));
     }
 
-    LOG.tracef("getClientScopeById(%s, %s)%s", realm, id, getShortStackTrace());
-    FileClientScopeEntity entity = FileClientScopeStore.read(id, realm.getId());
-    if (entity != null && isEntityPartOfRealm(realm, entity)) {
-      return entityToAdapterFunc(realm).apply(entity);
-    } else {
-      return null;
+    @Override
+    public ClientScopeModel addClientScope(RealmModel realm, String id, String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
+
+        if (FileClientScopeStore.exists(id, realm.getId())) {
+            throw new ModelDuplicateException("Client scope exists: " + id);
+        }
+
+        boolean doesNameAlreadyExists = FileClientScopeStore.readAll().stream()
+                .filter(clientScope -> realm.getId().equals(clientScope.getRealmId()))
+                .filter(clientScope -> name.equals(clientScope.getName()))
+                .map(entityToAdapterFunc(realm))
+                .findAny()
+                .isPresent();
+
+        if (doesNameAlreadyExists) {
+            throw new ModelDuplicateException("Client scope with name '" + name + "' in realm " + realm.getName());
+        }
+
+        LOG.tracef("addClientScope(%s, %s, %s)%s", realm, id, name, getShortStackTrace());
+        FileClientScopeEntity entity = new FileClientScopeEntity();
+        String newId = id != null ? id : name;
+        entity.setId(newId);
+        entity.setRealmId(realm.getId());
+        entity.setName(KeycloakModelUtils.convertClientScopeName(name));
+
+        FileClientScopeStore.update(entity);
+        return entityToAdapterFunc(realm).apply(entity);
     }
-  }
 
-  public void preRemove(RealmModel realm) {
-    LOG.tracef("preRemove(%s)%s", realm, getShortStackTrace());
-    FileClientScopeStore.deleteByRealmId(realm.getId());
-  }
+    @Override
+    public boolean removeClientScope(RealmModel realm, String id) {
+        if (id == null) return false;
 
-  @Override
-  public void close() {}
+        ClientScopeModel clientScope = getClientScopeById(realm, id);
+        if (clientScope == null) return false;
+
+        session.invalidate(CLIENT_SCOPE_BEFORE_REMOVE, realm, clientScope);
+        FileClientScopeStore.deleteById(id, realm.getId());
+        session.invalidate(CLIENT_SCOPE_AFTER_REMOVE, clientScope);
+        return true;
+    }
+
+    @Override
+    public void removeClientScopes(RealmModel realm) {
+        LOG.tracef("removeClients(%s)%s", realm, getShortStackTrace());
+        getClientScopesStream(realm)
+                .map(ClientScopeModel::getId)
+                .collect(Collectors.toSet()) // This is necessary to read out all the client IDs before removing the
+                // clients
+                .forEach(id -> removeClientScope(realm, id));
+    }
+
+    @Override
+    public ClientScopeModel getClientScopeById(RealmModel realm, String id) {
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        LOG.tracef("getClientScopeById(%s, %s)%s", realm, id, getShortStackTrace());
+        FileClientScopeEntity entity = FileClientScopeStore.read(id, realm.getId());
+        if (entity != null && isEntityPartOfRealm(realm, entity)) {
+            return entityToAdapterFunc(realm).apply(entity);
+        } else {
+            return null;
+        }
+    }
+
+    public void preRemove(RealmModel realm) {
+        LOG.tracef("preRemove(%s)%s", realm, getShortStackTrace());
+        FileClientScopeStore.deleteByRealmId(realm.getId());
+    }
+
+    @Override
+    public void close() {}
 }

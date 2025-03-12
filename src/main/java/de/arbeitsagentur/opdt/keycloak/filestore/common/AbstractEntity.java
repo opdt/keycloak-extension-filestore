@@ -23,8 +23,8 @@ import org.keycloak.models.map.annotations.CollectionKey;
  */
 public interface AbstractEntity {
 
-  @CollectionKey
-  String getId();
+    @CollectionKey
+    String getId();
 
-  void setId(String id);
+    void setId(String id);
 }

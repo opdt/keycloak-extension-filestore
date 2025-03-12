@@ -36,151 +36,151 @@ import org.keycloak.models.RealmModel;
 
 public class FileEventStoreProvider implements EventStoreProvider {
 
-  private static final Logger LOG = Logger.getLogger(FileEventStoreProvider.class);
-  private final KeycloakSession session;
+    private static final Logger LOG = Logger.getLogger(FileEventStoreProvider.class);
+    private final KeycloakSession session;
 
-  public FileEventStoreProvider(KeycloakSession session) {
-    this.session = session;
-  }
-
-  /** LOGIN EVENTS */
-  @Override
-  public void onEvent(Event event) {
-    LOG.tracef("onEvent(%s)%s", event, getShortStackTrace());
-    String id = event.getId();
-    String realmId = event.getRealmId();
-    if (FileAdminEventInMemoryStore.exists(id)) {
-      throw new ModelDuplicateException("Event already exists: " + id);
+    public FileEventStoreProvider(KeycloakSession session) {
+        this.session = session;
     }
 
-    FileAuthEventEntity entity = modelToEntity(event);
-    if (realmId != null) {
-      RealmModel realm = session.realms().getRealm(realmId);
-      if (realm != null && realm.getEventsExpiration() > 0) {
-        entity.setExpiration(Time.currentTimeMillis() + (realm.getEventsExpiration() * 1000));
-      }
-    }
-    FileAuthEventInMemoryStore.create(entity);
-  }
-
-  @Override
-  public EventQuery createQuery() {
-    LOG.tracef("createQuery()%s", getShortStackTrace());
-    return new FileAuthEventQuery() {
-      private boolean filterExpired(ExpirableEntity event) {
-        // Check if entity is expired
-        if (ExpirationUtils.isExpired(event, true)) {
-          return false; // Do not include entity in the resulting stream
+    /** LOGIN EVENTS */
+    @Override
+    public void onEvent(Event event) {
+        LOG.tracef("onEvent(%s)%s", event, getShortStackTrace());
+        String id = event.getId();
+        String realmId = event.getRealmId();
+        if (FileAdminEventInMemoryStore.exists(id)) {
+            throw new ModelDuplicateException("Event already exists: " + id);
         }
-        return true; // Entity is not expired
-      }
 
-      @Override
-      protected Stream<Event> read() {
-        return FileAuthEventInMemoryStore.readAll().stream()
-            .filter(ev -> realmId.equals(ev.getRealmId()))
-            .filter(this::filterExpired)
-            .map(EventUtils::entityToModel);
-      }
-    };
-  }
-
-  @Override
-  public void clear() {
-    LOG.tracef("clear()%s", getShortStackTrace());
-    FileAuthEventInMemoryStore.readAll().stream().forEach(FileAuthEventInMemoryStore::delete);
-  }
-
-  @Override
-  public void clear(RealmModel realm) {
-    LOG.tracef("clear(%s)%s", realm, getShortStackTrace());
-    FileAuthEventInMemoryStore.readAll().stream()
-        .filter(ev -> realm.getId().equals(ev.getRealmId()))
-        .forEach(FileAuthEventInMemoryStore::delete);
-  }
-
-  @Override
-  public void clear(RealmModel realm, long olderThan) {
-    LOG.tracef("clear(%s, %d)%s", realm, olderThan, getShortStackTrace());
-    FileAuthEventInMemoryStore.readAll().stream()
-        .filter(ev -> realm.getId().equals(ev.getRealmId()))
-        .filter(ev -> ev.getTimestamp() < olderThan)
-        .forEach(FileAuthEventInMemoryStore::delete);
-  }
-
-  @Override
-  public void clearExpiredEvents() {
-    LOG.tracef("clearExpiredEvents()%s", getShortStackTrace());
-    LOG.warnf(
-        "Clearing expired entities should not be triggered manually. It is responsibility of the store to clear these.");
-  }
-
-  /** ADMIN EVENTS */
-  @Override
-  public void onEvent(AdminEvent event, boolean includeRepresentation) {
-    LOG.tracef("onEvent(%s, %s)%s", event, includeRepresentation, getShortStackTrace());
-    String id = event.getId();
-    String realmId = event.getRealmId();
-    if (FileAdminEventInMemoryStore.exists(id)) {
-      throw new ModelDuplicateException("Event already exists: " + id);
-    }
-    FileAdminEventEntity entity = modelToEntity(event, includeRepresentation);
-    if (realmId != null) {
-      RealmModel realm = session.realms().getRealm(realmId);
-      if (realm != null) {
-        Long expiration = realm.getAttribute("adminEventsExpiration", 0L);
-        if (expiration > 0) {
-          entity.setExpiration(Time.currentTimeMillis() + (expiration * 1000));
+        FileAuthEventEntity entity = modelToEntity(event);
+        if (realmId != null) {
+            RealmModel realm = session.realms().getRealm(realmId);
+            if (realm != null && realm.getEventsExpiration() > 0) {
+                entity.setExpiration(Time.currentTimeMillis() + (realm.getEventsExpiration() * 1000));
+            }
         }
-      }
+        FileAuthEventInMemoryStore.create(entity);
     }
-    FileAdminEventInMemoryStore.create(entity);
-  }
 
-  @Override
-  public AdminEventQuery createAdminQuery() {
-    LOG.tracef("createAdminQuery()%s", getShortStackTrace());
-    return new FileAdminEventQuery() {
-      private boolean filterExpired(ExpirableEntity event) {
-        if (ExpirationUtils.isExpired(event, true)) {
-          return false; // Do not include entity in the resulting stream
+    @Override
+    public EventQuery createQuery() {
+        LOG.tracef("createQuery()%s", getShortStackTrace());
+        return new FileAuthEventQuery() {
+            private boolean filterExpired(ExpirableEntity event) {
+                // Check if entity is expired
+                if (ExpirationUtils.isExpired(event, true)) {
+                    return false; // Do not include entity in the resulting stream
+                }
+                return true; // Entity is not expired
+            }
+
+            @Override
+            protected Stream<Event> read() {
+                return FileAuthEventInMemoryStore.readAll().stream()
+                        .filter(ev -> realmId.equals(ev.getRealmId()))
+                        .filter(this::filterExpired)
+                        .map(EventUtils::entityToModel);
+            }
+        };
+    }
+
+    @Override
+    public void clear() {
+        LOG.tracef("clear()%s", getShortStackTrace());
+        FileAuthEventInMemoryStore.readAll().stream().forEach(FileAuthEventInMemoryStore::delete);
+    }
+
+    @Override
+    public void clear(RealmModel realm) {
+        LOG.tracef("clear(%s)%s", realm, getShortStackTrace());
+        FileAuthEventInMemoryStore.readAll().stream()
+                .filter(ev -> realm.getId().equals(ev.getRealmId()))
+                .forEach(FileAuthEventInMemoryStore::delete);
+    }
+
+    @Override
+    public void clear(RealmModel realm, long olderThan) {
+        LOG.tracef("clear(%s, %d)%s", realm, olderThan, getShortStackTrace());
+        FileAuthEventInMemoryStore.readAll().stream()
+                .filter(ev -> realm.getId().equals(ev.getRealmId()))
+                .filter(ev -> ev.getTimestamp() < olderThan)
+                .forEach(FileAuthEventInMemoryStore::delete);
+    }
+
+    @Override
+    public void clearExpiredEvents() {
+        LOG.tracef("clearExpiredEvents()%s", getShortStackTrace());
+        LOG.warnf(
+                "Clearing expired entities should not be triggered manually. It is responsibility of the store to clear these.");
+    }
+
+    /** ADMIN EVENTS */
+    @Override
+    public void onEvent(AdminEvent event, boolean includeRepresentation) {
+        LOG.tracef("onEvent(%s, %s)%s", event, includeRepresentation, getShortStackTrace());
+        String id = event.getId();
+        String realmId = event.getRealmId();
+        if (FileAdminEventInMemoryStore.exists(id)) {
+            throw new ModelDuplicateException("Event already exists: " + id);
         }
-        return true; // Entity is not expired
-      }
+        FileAdminEventEntity entity = modelToEntity(event, includeRepresentation);
+        if (realmId != null) {
+            RealmModel realm = session.realms().getRealm(realmId);
+            if (realm != null) {
+                Long expiration = realm.getAttribute("adminEventsExpiration", 0L);
+                if (expiration > 0) {
+                    entity.setExpiration(Time.currentTimeMillis() + (expiration * 1000));
+                }
+            }
+        }
+        FileAdminEventInMemoryStore.create(entity);
+    }
 
-      @Override
-      protected Stream<AdminEvent> read() {
-        return FileAdminEventInMemoryStore.readAll().stream()
-            .filter(ev -> realmId.equals(ev.getRealmId()))
-            .filter(this::filterExpired)
-            .map(EventUtils::entityToModel);
-      }
-    };
-  }
+    @Override
+    public AdminEventQuery createAdminQuery() {
+        LOG.tracef("createAdminQuery()%s", getShortStackTrace());
+        return new FileAdminEventQuery() {
+            private boolean filterExpired(ExpirableEntity event) {
+                if (ExpirationUtils.isExpired(event, true)) {
+                    return false; // Do not include entity in the resulting stream
+                }
+                return true; // Entity is not expired
+            }
 
-  @Override
-  public void clearAdmin() {
-    LOG.tracef("clearAdmin()%s", getShortStackTrace());
-    FileAdminEventInMemoryStore.readAll().stream().forEach(FileAdminEventInMemoryStore::delete);
-  }
+            @Override
+            protected Stream<AdminEvent> read() {
+                return FileAdminEventInMemoryStore.readAll().stream()
+                        .filter(ev -> realmId.equals(ev.getRealmId()))
+                        .filter(this::filterExpired)
+                        .map(EventUtils::entityToModel);
+            }
+        };
+    }
 
-  @Override
-  public void clearAdmin(RealmModel realm) {
-    LOG.tracef("clearAdmin(%s)%s", realm, getShortStackTrace());
-    FileAdminEventInMemoryStore.readAll().stream()
-        .filter(ev -> realm.getId().equals(ev.getRealmId()))
-        .forEach(FileAdminEventInMemoryStore::delete);
-  }
+    @Override
+    public void clearAdmin() {
+        LOG.tracef("clearAdmin()%s", getShortStackTrace());
+        FileAdminEventInMemoryStore.readAll().stream().forEach(FileAdminEventInMemoryStore::delete);
+    }
 
-  @Override
-  public void clearAdmin(RealmModel realm, long olderThan) {
-    LOG.tracef("clearAdmin(%s, %d)%s", realm, olderThan, getShortStackTrace());
-    FileAdminEventInMemoryStore.readAll().stream()
-        .filter(ev -> realm.getId().equals(ev.getRealmId()))
-        .filter(ev -> ev.getTimestamp() < olderThan)
-        .forEach(FileAdminEventInMemoryStore::delete);
-  }
+    @Override
+    public void clearAdmin(RealmModel realm) {
+        LOG.tracef("clearAdmin(%s)%s", realm, getShortStackTrace());
+        FileAdminEventInMemoryStore.readAll().stream()
+                .filter(ev -> realm.getId().equals(ev.getRealmId()))
+                .forEach(FileAdminEventInMemoryStore::delete);
+    }
 
-  @Override
-  public void close() {}
+    @Override
+    public void clearAdmin(RealmModel realm, long olderThan) {
+        LOG.tracef("clearAdmin(%s, %d)%s", realm, olderThan, getShortStackTrace());
+        FileAdminEventInMemoryStore.readAll().stream()
+                .filter(ev -> realm.getId().equals(ev.getRealmId()))
+                .filter(ev -> ev.getTimestamp() < olderThan)
+                .forEach(FileAdminEventInMemoryStore::delete);
+    }
+
+    @Override
+    public void close() {}
 }

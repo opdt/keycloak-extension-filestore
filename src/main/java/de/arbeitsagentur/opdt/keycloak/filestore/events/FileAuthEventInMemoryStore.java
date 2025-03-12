@@ -24,21 +24,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FileAuthEventInMemoryStore {
 
-  private static final Map<String, FileAuthEventEntity> cache = new ConcurrentHashMap<>();
+    private static final Map<String, FileAuthEventEntity> cache = new ConcurrentHashMap<>();
 
-  public static boolean exists(String eventId) {
-    return cache.containsKey(eventId);
-  }
+    public static boolean exists(String eventId) {
+        return cache.containsKey(eventId);
+    }
 
-  public static List<FileAuthEventEntity> readAll() {
-    return cache.values().stream().filter(Objects::nonNull).toList();
-  }
+    public static List<FileAuthEventEntity> readAll() {
+        return cache.values().stream().filter(Objects::nonNull).toList();
+    }
 
-  public static void create(FileAuthEventEntity entity) {
-    cache.put(entity.getId(), entity);
-  }
+    public static void create(FileAuthEventEntity entity) {
+        cache.put(entity.getId(), entity);
+    }
 
-  public static void delete(FileAuthEventEntity entity) {
-    cache.remove(entity.getId());
-  }
+    public static void delete(FileAuthEventEntity entity) {
+        cache.remove(entity.getId());
+    }
 }

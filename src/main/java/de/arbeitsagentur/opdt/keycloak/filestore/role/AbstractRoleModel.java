@@ -24,28 +24,28 @@ import org.keycloak.models.RoleModel;
 
 public abstract class AbstractRoleModel<E extends AbstractEntity> implements RoleModel {
 
-  protected final KeycloakSession session;
-  protected final RealmModel realm;
-  protected final E entity;
+    protected final KeycloakSession session;
+    protected final RealmModel realm;
+    protected final E entity;
 
-  public AbstractRoleModel(KeycloakSession session, RealmModel realm, E entity) {
-    Objects.requireNonNull(entity, "entity");
-    Objects.requireNonNull(realm, "realm");
-    this.session = session;
-    this.realm = realm;
-    this.entity = entity;
-  }
+    public AbstractRoleModel(KeycloakSession session, RealmModel realm, E entity) {
+        Objects.requireNonNull(entity, "entity");
+        Objects.requireNonNull(realm, "realm");
+        this.session = session;
+        this.realm = realm;
+        this.entity = entity;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof RoleModel)) return false;
-    RoleModel that = (RoleModel) o;
-    return Objects.equals(that.getId(), getId());
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RoleModel)) return false;
+        RoleModel that = (RoleModel) o;
+        return Objects.equals(that.getId(), getId());
+    }
 
-  @Override
-  public int hashCode() {
-    return getId().hashCode();
-  }
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }
