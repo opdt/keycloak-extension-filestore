@@ -29,7 +29,7 @@ public class FileOTPPolicyEntity implements UpdatableEntity {
     private Integer otpPolicyPeriod;
     private String otpPolicyType;
     private String otpPolicyAlgorithm;
-    private Boolean isOtpPolicyCodeReusable = false;
+    private Boolean otpPolicyCodeReusable = false;
 
     static FileOTPPolicyEntity fromModel(OTPPolicy model) {
         if (model == null) return null;
@@ -115,18 +115,14 @@ public class FileOTPPolicyEntity implements UpdatableEntity {
     }
 
     public Boolean isOtpPolicyCodeReusable() {
-        return this.isOtpPolicyCodeReusable;
+        return this.otpPolicyCodeReusable;
     }
 
-    public void setOtpPolicyCodeReusable(Boolean isOtpPolicyCodeReusable) {
-        this.isOtpPolicyCodeReusable = isOtpPolicyCodeReusable;
+    public void setOtpPolicyCodeReusable(Boolean otpPolicyCodeReusable) {
+        this.otpPolicyCodeReusable = otpPolicyCodeReusable;
     }
 
     public void setUpdated(boolean updated) {
         isUpdated = updated;
-    }
-
-    public Boolean getOtpPolicyCodeReusable() {
-        return isOtpPolicyCodeReusable;
     }
 }
