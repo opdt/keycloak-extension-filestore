@@ -67,6 +67,7 @@ public class FileEventStoreProvider implements EventStoreProvider {
     public EventQuery createQuery() {
         LOG.tracef("createQuery()%s", getShortStackTrace());
         return new FileAuthEventQuery() {
+
             private boolean filterExpired(ExpirableEntity event) {
                 // Check if entity is expired
                 if (ExpirationUtils.isExpired(event, true)) {

@@ -21,7 +21,7 @@
 
   <groupId>de.arbeitsagentur.opdt</groupId>
   <artifactId>keycloak-extension-filestore</artifactId>
-  <version>1.2.2-26.1-SNAPSHOT</version>
+  <version>1.2.2-26.2-SNAPSHOT</version>
 
   <name>keycloak-extension-filestore</name>
   <description>Keycloak-DatastoreProvider storing data in file system</description>
@@ -62,7 +62,7 @@
     <java.version>21</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <keycloak.version>26.1.1</keycloak.version>
+    <keycloak.version>26.2.5</keycloak.version>
     <auto-service.version>1.1.1</auto-service.version>
     <spotless.version>2.44.3</spotless.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -367,6 +367,8 @@
             <log4j.configuration>file:${project.build.directory}/test-classes/log4j.properties</log4j.configuration>
             <!-- for the logging to properly work with tests in the 'other' module -->
             <keycloak.profile.feature.authorization>disabled</keycloak.profile.feature.authorization>
+            <keycloak.profile.feature.admin_fine_grained_authz>disabled</keycloak.profile.feature.admin_fine_grained_authz>
+            <keycloak.profile.feature.opentelemetry>disabled</keycloak.profile.feature.opentelemetry>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <org.jboss.logging.provider>log4j</org.jboss.logging.provider>
             <argLine>-Djava.awt.headless=true

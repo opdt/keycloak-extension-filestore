@@ -108,6 +108,18 @@ public abstract class FileAdminEventQuery implements AdminEventQuery {
     }
 
     @Override
+    public AdminEventQuery fromTime(long l) {
+        this.fromTimestamp = l;
+        return this;
+    }
+
+    @Override
+    public AdminEventQuery toTime(long l) {
+        this.toTimestamp = l;
+        return this;
+    }
+
+    @Override
     public AdminEventQuery firstResult(int first) {
         firstResult = first;
         return this;

@@ -78,6 +78,18 @@ public abstract class FileAuthEventQuery implements EventQuery {
     }
 
     @Override
+    public EventQuery fromDate(long l) {
+        this.fromTimestamp = l;
+        return this;
+    }
+
+    @Override
+    public EventQuery toDate(long l) {
+        this.toTimestamp = l;
+        return this;
+    }
+
+    @Override
     public EventQuery ipAddress(String ipAddress) {
         this.ipAddress = ipAddress;
         return this;
