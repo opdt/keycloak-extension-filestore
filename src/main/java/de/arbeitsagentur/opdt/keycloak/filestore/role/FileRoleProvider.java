@@ -253,6 +253,7 @@ public class FileRoleProvider implements RoleProvider {
         final RealmModel realm = client.getRealm();
         Stream<RoleModel> roleStream = FileRoleStore.readAll().stream()
                 .filter(e -> realm.getId().equals(e.getRealmId()))
+                .filter(role -> role.getClientId() != null)
                 .filter(role -> client.getId().equals(role.getClientId()))
                 .map(entityToAdapterFunc(realm))
                 .sorted(Comparator.comparing(RoleModel::getName));
@@ -275,6 +276,7 @@ public class FileRoleProvider implements RoleProvider {
 
         Stream<RoleModel> roleStream = ids.filter(id -> FileRoleStore.exists(id, realm.getId()))
                 .map(id -> FileRoleStore.read(id, realm.getId()))
+                .filter(role -> role.getClientId() != null)
                 .map(entityToAdapterFunc(realm))
                 .sorted(Comparator.comparing(RoleModel::getName));
 
@@ -297,6 +299,7 @@ public class FileRoleProvider implements RoleProvider {
         List<String> excludedIdsList = excludedIds.toList();
         Stream<RoleModel> roleStream = FileRoleStore.readAll().stream()
                 .filter(e -> realm.getId().equals(e.getRealmId()))
+                .filter(role -> role.getClientId() != null)
                 .filter(role -> !excludedIdsList.contains(role.getId()))
                 .map(entityToAdapterFunc(realm))
                 .sorted(Comparator.comparing(RoleModel::getName));
