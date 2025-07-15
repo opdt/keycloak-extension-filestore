@@ -66,7 +66,12 @@ public class FileRoleStore {
     }
 
     private static Path createFilePath(String roleId, String realmId) {
-        return EntityIO.getPathForIdAndParentPath(
-                roleId, EntityIO.getRootDirectory().resolve(realmId).resolve(OBJECT_DIRECTORY));
+        if (roleId.contains(":")) {
+            return EntityIO.getPathForIdAndParentPath(
+                    roleId.split(":")[1], EntityIO.getRootDirectory().resolve(realmId).resolve(OBJECT_DIRECTORY).resolve(roleId.split(":")[0]));
+        } else {
+            return EntityIO.getPathForIdAndParentPath(
+                    roleId, EntityIO.getRootDirectory().resolve(realmId).resolve(OBJECT_DIRECTORY));
+        }
     }
 }

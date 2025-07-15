@@ -459,14 +459,16 @@ class FileRoleProviderTest extends KeycloakModelTest {
         withRealm(REALM_ID, (session, realm) -> {
             // Arrange
             var ids = List.of(
-                    "patty", // partial match -> exclude
-                    "no-match", // no match -> exclude
-                    "abc-pattern",
-                    "abc-pattern-xyz",
-                    "pattern",
-                    "pattern-xyz");
+                    "bathtub:patty", // partial match -> exclude
+                    "bathtub:no-match", // no match -> exclude
+                    "bathtub:abc-pattern",
+                    "bathtub:abc-pattern-xyz",
+                    "bathtub:pattern",
+                    "bathtub:pattern-xyz");
 
-            ids.forEach(id -> session.roles().addRealmRole(realm, id));
+            var client = session.clients().addClient(realm, "bathtub");
+
+            ids.forEach(id -> session.roles().addClientRole(client, id.split(":")[1]));
             // Act
             var actual = session.roles().searchForClientRolesStream(realm, ids.stream(), "pattern", null, null);
             // Assert
@@ -499,9 +501,11 @@ class FileRoleProviderTest extends KeycloakModelTest {
                     "pattern",
                     "pattern-xyz");
 
-            ids.forEach(id -> session.roles().addRealmRole(realm, id));
+            var client = session.clients().addClient(realm, "bathtub");
+
+            ids.forEach(id -> session.roles().addClientRole(client, id));
             // Act
-            Stream<String> excludedIds = Stream.of("abc-pattern", "abc-pattern-xyz");
+            Stream<String> excludedIds = Stream.of("bathtub:abc-pattern", "bathtub:abc-pattern-xyz");
             var actual = session.roles().searchForClientRolesStream(realm, "pattern", excludedIds, null, null);
             // Assert
             assertThat(actual).hasSize(2).map(RoleModel::getName).containsExactly("pattern", "pattern-xyz");
