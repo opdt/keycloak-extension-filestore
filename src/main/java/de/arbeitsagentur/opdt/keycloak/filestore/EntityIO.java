@@ -178,12 +178,18 @@ public class EntityIO {
     }
 
     private static <E extends AbstractEntity & UpdatableEntity> String[] getSuggestedPath(E entity, Class<E> clazz) {
-        Function<E, String[]> fileNameByEntity = ((Function<E, String[]>) UNIQUE_HUMAN_READABLE_NAME_FIELD.get(clazz));
-        if (fileNameByEntity == null) {
-            fileNameByEntity = e -> e.getId() == null ? null : new String[] {e.getId()};
-        }
+        if (entity.getId() == null) {
+            Function<E, String[]> fileNameByEntity =
+                    ((Function<E, String[]>) UNIQUE_HUMAN_READABLE_NAME_FIELD.get(clazz));
 
-        return fileNameByEntity.apply(entity);
+            if (fileNameByEntity == null) {
+                return null;
+            }
+
+            return fileNameByEntity.apply(entity);
+        } else {
+            return new String[] {entity.getId()};
+        }
     }
 
     public static String[] escapeId(String[] idArray) {

@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
 import org.keycloak.Config;
 import org.keycloak.authorization.model.*;
 import org.keycloak.authorization.store.*;
@@ -231,12 +230,14 @@ public class NullCachedStoreProviderFactory
                     }
 
                     @Override
-                    public Stream<Policy> findDependentPolicies(ResourceServer resourceServer, String s, String s1, String s2, String s3) {
+                    public Stream<Policy> findDependentPolicies(
+                            ResourceServer resourceServer, String s, String s1, String s2, String s3) {
                         return Stream.empty();
                     }
 
                     @Override
-                    public Stream<Policy> findDependentPolicies(ResourceServer resourceServer, String s, String s1, String s2, List<String> list) {
+                    public Stream<Policy> findDependentPolicies(
+                            ResourceServer resourceServer, String s, String s1, String s2, List<String> list) {
                         return Stream.empty();
                     }
                 };
