@@ -90,7 +90,7 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public List<FileProtocolMapperEntity> getProtocolMappers() {
-        return this.protocolMappers;
+        return this.protocolMappers == null ? Collections.emptyList() : this.protocolMappers;
     }
 
     public void addProtocolMapper(FileProtocolMapperEntity mapping) {
@@ -109,7 +109,7 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public List<String> getRedirectUris() {
-        return this.redirectUris;
+        return this.redirectUris == null ? Collections.emptyList() : this.redirectUris;
     }
 
     public void removeRedirectUri(String redirectUri) {
@@ -142,7 +142,7 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public List<String> getWebOrigins() {
-        return this.webOrigins;
+        return this.webOrigins == null ? Collections.emptyList() : this.webOrigins;
     }
 
     public void removeWebOrigin(String webOrigin) {
