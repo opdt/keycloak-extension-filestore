@@ -21,6 +21,7 @@ import de.arbeitsagentur.opdt.keycloak.filestore.common.AbstractEntity;
 import de.arbeitsagentur.opdt.keycloak.filestore.common.UpdatableEntity;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class FileProtocolMapperEntity implements AbstractEntity, UpdatableEntity {
 
@@ -67,5 +68,18 @@ public class FileProtocolMapperEntity implements AbstractEntity, UpdatableEntity
     @Override
     public boolean isUpdated() {
         return this.isUpdated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileProtocolMapperEntity that = (FileProtocolMapperEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -74,13 +74,18 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setClientScope(String id, Boolean defaultScope) {
-        this.clientScopes.put(id, defaultScope);
-        FileClientStore.update(this);
+        Boolean currentValue = this.clientScopes.get(id);
+        if (currentValue != defaultScope) {
+            this.clientScopes.put(id, defaultScope);
+            FileClientStore.update(this);
+        }
     }
 
     public void removeClientScope(String id) {
-        this.clientScopes.remove(id);
-        FileClientStore.update(this);
+        if (this.clientScopes.containsKey(id)) {
+            this.clientScopes.remove(id);
+            FileClientStore.update(this);
+        }
     }
 
     public Optional<FileProtocolMapperEntity> getProtocolMapper(String id) {
@@ -94,18 +99,25 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void addProtocolMapper(FileProtocolMapperEntity mapping) {
-        this.protocolMappers.add(mapping);
-        FileClientStore.update(this);
+        if (!this.protocolMappers.contains(mapping)) {
+            this.protocolMappers.add(mapping);
+            FileClientStore.update(this);
+        }
     }
 
     public void removeProtocolMapper(String id) {
-        this.protocolMappers.removeIf(mapper -> mapper.getId().equals(id));
-        FileClientStore.update(this);
+        boolean removed = this.protocolMappers.removeIf(mapper -> mapper.getId().equals(id));
+
+        if (removed) {
+            FileClientStore.update(this);
+        }
     }
 
     public void addRedirectUri(String redirectUri) {
-        this.redirectUris.add(redirectUri);
-        FileClientStore.update(this);
+        if (!this.redirectUris.contains(redirectUri)) {
+            this.redirectUris.add(redirectUri);
+            FileClientStore.update(this);
+        }
     }
 
     public List<String> getRedirectUris() {
@@ -113,23 +125,31 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void removeRedirectUri(String redirectUri) {
-        this.redirectUris.remove(redirectUri);
-        FileClientStore.update(this);
+        if (this.redirectUris.contains(redirectUri)) {
+            this.redirectUris.remove(redirectUri);
+            FileClientStore.update(this);
+        }
     }
 
     public void setRedirectUris(List<String> redirectUris) {
-        this.redirectUris = redirectUris;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.redirectUris, redirectUris)) {
+            this.redirectUris = redirectUris;
+            FileClientStore.update(this);
+        }
     }
 
     public void addScopeMapping(String id) {
-        this.scopeMappings.add(id);
-        FileClientStore.update(this);
+        if (!this.scopeMappings.contains(id)) {
+            this.scopeMappings.add(id);
+            FileClientStore.update(this);
+        }
     }
 
     public void removeScopeMapping(String id) {
-        this.scopeMappings.remove(id);
-        FileClientStore.update(this);
+        if (this.scopeMappings.contains(id)) {
+            this.scopeMappings.remove(id);
+            FileClientStore.update(this);
+        }
     }
 
     public List<String> getScopeMappings() {
@@ -137,8 +157,10 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void addWebOrigin(String webOrigin) {
-        this.webOrigins.add(webOrigin);
-        FileClientStore.update(this);
+        if (!this.webOrigins.contains(webOrigin)) {
+            this.webOrigins.add(webOrigin);
+            FileClientStore.update(this);
+        }
     }
 
     public List<String> getWebOrigins() {
@@ -146,13 +168,17 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void removeWebOrigin(String webOrigin) {
-        this.webOrigins.remove(webOrigin);
-        FileClientStore.update(this);
+        if (this.webOrigins.contains(webOrigin)) {
+            this.webOrigins.remove(webOrigin);
+            FileClientStore.update(this);
+        }
     }
 
     public void setWebOrigins(List<String> webOrigins) {
-        this.webOrigins = webOrigins;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.webOrigins, webOrigins)) {
+            this.webOrigins = webOrigins;
+            FileClientStore.update(this);
+        }
     }
 
     public String getAuthenticationFlowBindingOverride(String binding) {
@@ -164,13 +190,19 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void removeAuthenticationFlowBindingOverride(String binding) {
-        this.authenticationFlowBindingOverrides.remove(binding);
-        FileClientStore.update(this);
+        if (this.authenticationFlowBindingOverrides.containsKey(binding)) {
+            this.authenticationFlowBindingOverrides.remove(binding);
+            FileClientStore.update(this);
+        }
     }
 
     public void setAuthenticationFlowBindingOverride(String binding, String flowId) {
-        this.authenticationFlowBindingOverrides.put(binding, flowId);
-        FileClientStore.update(this);
+        String existing = this.authenticationFlowBindingOverrides.get(binding);
+
+        if (!Objects.equals(existing, flowId)) {
+            this.authenticationFlowBindingOverrides.put(binding, flowId);
+            FileClientStore.update(this);
+        }
     }
 
     public String getBaseUrl() {
@@ -285,23 +317,31 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.baseUrl, baseUrl)) {
+            this.baseUrl = baseUrl;
+            FileClientStore.update(this);
+        }
     }
 
     public void setBearerOnly(Boolean bearerOnly) {
-        this.bearerOnly = bearerOnly;
-        FileClientStore.update(this);
+        if (this.bearerOnly != bearerOnly) {
+            this.bearerOnly = bearerOnly;
+            FileClientStore.update(this);
+        }
     }
 
     public void setClientAuthenticatorType(String clientAuthenticatorType) {
-        this.clientAuthenticatorType = clientAuthenticatorType;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.clientAuthenticatorType, clientAuthenticatorType)) {
+            this.clientAuthenticatorType = clientAuthenticatorType;
+            FileClientStore.update(this);
+        }
     }
 
     public void setClientId(String clientId) {
-        this.clientId = clientId;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.clientId, clientId)) {
+            this.clientId = clientId;
+            FileClientStore.update(this);
+        }
     }
 
     public void setConsentRequired(Boolean consentRequired) {
@@ -312,8 +352,10 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setDescription(String description) {
-        this.description = description;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.description, description)) {
+            this.description = description;
+            FileClientStore.update(this);
+        }
     }
 
     public void setDirectAccessGrantsEnabled(Boolean directAccessGrantsEnabled) {
@@ -352,28 +394,38 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setManagementUrl(String managementUrl) {
-        this.managementUrl = managementUrl;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.managementUrl, managementUrl)) {
+            this.managementUrl = managementUrl;
+            FileClientStore.update(this);
+        }
     }
 
     public void setName(String name) {
-        this.name = name;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.name, name)) {
+            this.name = name;
+            FileClientStore.update(this);
+        }
     }
 
     public void setNodeReRegistrationTimeout(Integer nodeReRegistrationTimeout) {
-        this.nodeReRegistrationTimeout = nodeReRegistrationTimeout;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.nodeReRegistrationTimeout, nodeReRegistrationTimeout)) {
+            this.nodeReRegistrationTimeout = nodeReRegistrationTimeout;
+            FileClientStore.update(this);
+        }
     }
 
     public void setNotBefore(Long notBefore) {
-        this.notBefore = notBefore;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.notBefore, notBefore)) {
+            this.notBefore = notBefore;
+            FileClientStore.update(this);
+        }
     }
 
     public void setProtocol(String protocol) {
-        this.protocol = protocol;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.protocol, protocol)) {
+            this.protocol = protocol;
+            FileClientStore.update(this);
+        }
     }
 
     public void setPublicClient(Boolean publicClient) {
@@ -388,23 +440,31 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setRegistrationToken(String registrationToken) {
-        this.registrationToken = registrationToken;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.registrationToken, registrationToken)) {
+            this.registrationToken = registrationToken;
+            FileClientStore.update(this);
+        }
     }
 
     public void setRootUrl(String rootUrl) {
-        this.rootUrl = rootUrl;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.rootUrl, rootUrl)) {
+            this.rootUrl = rootUrl;
+            FileClientStore.update(this);
+        }
     }
 
     public void setScope(List<String> scope) {
-        this.scope = scope;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.scope, scope)) {
+            this.scope = scope;
+            FileClientStore.update(this);
+        }
     }
 
     public void setSecret(String secret) {
-        this.secret = secret;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.secret, secret)) {
+            this.secret = secret;
+            FileClientStore.update(this);
+        }
     }
 
     public void setServiceAccountsEnabled(Boolean serviceAccountsEnabled) {
@@ -449,8 +509,10 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
-        FileClientStore.update(this);
+        if (!Objects.equals(this.attributes, attributes)) {
+            this.attributes = attributes;
+            FileClientStore.update(this);
+        }
     }
 
     public void setMultiValueAttributes(Map<String, List<String>> attributes) {
@@ -468,8 +530,12 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setAttribute(String name, List<String> value) {
-        this.attributes.put(name, value.get(0));
-        FileClientStore.update(this);
+        Object existing = this.attributes.get(name);
+
+        if (!Objects.equals(existing, value.get(0))) {
+            this.attributes.put(name, value.get(0));
+            FileClientStore.update(this);
+        }
     }
 
     public void removeAttribute(String name) {
@@ -492,19 +558,27 @@ public class FileClientEntity implements AbstractEntity, UpdatableEntity {
     }
 
     public void setClientScopes(Map<String, Boolean> clientScopes) {
-        this.clientScopes = clientScopes;
+        if (!Objects.equals(this.clientScopes, clientScopes)) {
+            this.clientScopes = clientScopes;
+        }
     }
 
     public void setProtocolMappers(List<FileProtocolMapperEntity> protocolMappers) {
-        this.protocolMappers = protocolMappers;
+        if (!Objects.equals(this.protocolMappers, protocolMappers)) {
+            this.protocolMappers = protocolMappers;
+        }
     }
 
     public void setScopeMappings(List<String> scopeMappings) {
-        this.scopeMappings = scopeMappings;
+        if (!Objects.equals(this.scopeMappings, scopeMappings)) {
+            this.scopeMappings = scopeMappings;
+        }
     }
 
     public void setAuthenticationFlowBindingOverrides(Map<String, String> authenticationFlowBindingOverrides) {
-        this.authenticationFlowBindingOverrides = authenticationFlowBindingOverrides;
+        if (!Objects.equals(this.authenticationFlowBindingOverrides, authenticationFlowBindingOverrides)) {
+            this.authenticationFlowBindingOverrides = authenticationFlowBindingOverrides;
+        }
     }
 
     public Boolean getAlwaysDisplayInConsole() {
